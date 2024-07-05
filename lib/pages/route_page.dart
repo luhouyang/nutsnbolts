@@ -39,6 +39,7 @@ class _RoutePageState extends State<RoutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: getPage(_bottomNavIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
