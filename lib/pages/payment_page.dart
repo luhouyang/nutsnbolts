@@ -10,6 +10,8 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("payment"),);
+    return const Center(
+      child: Text("payment"),
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:nutsnbolts/pages/add_case_page.dart';
 import 'package:nutsnbolts/pages/home_page.dart';
 import 'package:nutsnbolts/pages/payment_page.dart';
 import 'package:nutsnbolts/pages/profile_page.dart';
@@ -22,14 +23,14 @@ class _RoutePageState extends State<RoutePage> {
 
   int _bottomNavIndex = 0;
 
-  Widget getPage(int idx) {
-    if (idx == 0) {
+  Widget getPage(int index) {
+    if (index == 0) {
       return const HomePage();
-    } else if (idx == 1) {
+    } else if (index == 1) {
       return const TechnicianPage();
-    } else if (idx == 2) {
+    } else if (index == 2) {
       return const PaymentPage();
-    } else if (idx == 3) {
+    } else if (index == 3) {
       return const ProfilePage();
     }
     return const HomePage();
@@ -38,9 +39,14 @@ class _RoutePageState extends State<RoutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: getPage(_bottomNavIndex),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const AddCasePage(),
+          ));
+        },
         shape: const CircleBorder(),
         backgroundColor: Colors.amber,
         child: const Icon(Icons.add),

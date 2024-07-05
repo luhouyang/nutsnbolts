@@ -10,6 +10,8 @@ class TechnicianPage extends StatefulWidget {
 class _TechnicianPageState extends State<TechnicianPage> {
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("side scrolling"),);
+    return const Center(
+      child: Text("side scrolling"),
+    );
   }
 }
