@@ -22,7 +22,7 @@ class UserEntity {
     );
   }
 
-  Map toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'uid': uid,
       'userName': userName,

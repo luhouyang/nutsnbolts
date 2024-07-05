@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nutsnbolts/model/firestore_model.dart';
+import 'package:nutsnbolts/testdata/test_data.dart';
+import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/widgets/my_text_field.dart';
+import 'package:provider/provider.dart';
 
 class AddCasePage extends StatefulWidget {
   const AddCasePage({super.key});
@@ -14,14 +18,22 @@ class _AddCasePageState extends State<AddCasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          MyTextField(hint: "case title", validator: textVerify, controller: caseTitleController),
-          ElevatedButton(onPressed: () {}, child: const Text("submit"))
-        ],
+      body: Consumer<UserUsecase>(
+        builder: (context, userUsecase, child) {
+          return Column(
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              MyTextField(hint: "case title", validator: textVerify, controller: caseTitleController),
+              ElevatedButton(
+                  onPressed: () async {
+                    await FirestoreModel().addCase(TestData.caseEntity, userUsecase);
+                  },
+                  child: const Text("submit"))
+            ],
+          );
+        },
       ),
     );
   }

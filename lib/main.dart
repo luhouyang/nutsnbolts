@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nutsnbolts/firebase_options.dart';
+import 'package:nutsnbolts/pages/route_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:provider/provider.dart';
 import 'package:nutsnbolts/pages/auth_page.dart';
@@ -22,12 +23,12 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(
+        ChangeNotifierProvider(
           create: (context) => UserUsecase(),
         ),
       ],
       child: const MaterialApp(
-          debugShowCheckedModeBanner: false, home: AuthGate()),
+          debugShowCheckedModeBanner: false, home: RoutePage()),
     );
   }
 }

@@ -66,7 +66,7 @@ class CaseEntity {
     );
   }
 
-  Map toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'caseId': caseId,
       'caseTitle': caseTitle,
