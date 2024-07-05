@@ -11,7 +11,7 @@ class UserEntity {
   UserEntity(
       {required this.uid, required this.userName, required this.email, required this.phoneNo, required this.location, required this.isTechnician});
 
-  factory UserEntity.from(Map<String, dynamic> map) {
+  factory UserEntity.fromMap(Map<String, dynamic> map) {
     return UserEntity(
       uid: map["uid"],
       userName: map["userName"],

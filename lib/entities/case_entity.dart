@@ -62,7 +62,7 @@ class CaseEntity {
       clientPrice: map["clientPrice"],
       technicianPrice: map["technicianPrice"],
       appointment: map["appointment"] as Timestamp,
-      caseResolvedTime: map["caseResolved"] as Timestamp,
+      caseResolvedTime: map["caseResolvedTime"] as Timestamp,
     );
   }
 

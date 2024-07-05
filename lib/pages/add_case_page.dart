@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/testdata/test_data.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
@@ -14,6 +15,7 @@ class AddCasePage extends StatefulWidget {
 
 class _AddCasePageState extends State<AddCasePage> {
   TextEditingController caseTitleController = TextEditingController();
+  TextEditingController caseDescController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,22 @@ class _AddCasePageState extends State<AddCasePage> {
                 height: 30,
               ),
               MyTextField(hint: "case title", validator: textVerify, controller: caseTitleController),
+              MyTextField(hint: "case description", validator: textVerify, controller: caseDescController),
               ElevatedButton(
                   onPressed: () async {
-                    await FirestoreModel().addCase(TestData.caseEntity, userUsecase);
+                    CaseEntity caseEntity = TestData.caseEntity;
+
+                    caseEntity.caseTitle = caseTitleController.text;
+                    caseEntity.caseDesc = caseDescController.text;
+
+                    caseEntity.clientName = userUsecase.userEntity.userName;
+                    caseEntity.clientPhoneNo = userUsecase.userEntity.phoneNo;
+
+                    await FirestoreModel().addCase(caseEntity, userUsecase).then(
+                      (value) {
+                        Navigator.of(context).pop();
+                      },
+                    );
                   },
                   child: const Text("submit"))
             ],

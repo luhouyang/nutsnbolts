@@ -5,6 +5,8 @@ import 'package:nutsnbolts/pages/home_page.dart';
 import 'package:nutsnbolts/pages/payment_page.dart';
 import 'package:nutsnbolts/pages/profile_page.dart';
 import 'package:nutsnbolts/pages/technician_page.dart';
+import 'package:nutsnbolts/usecases/user_usecase.dart';
+import 'package:provider/provider.dart';
 
 class RoutePage extends StatefulWidget {
   const RoutePage({super.key});
@@ -32,48 +34,68 @@ class _RoutePageState extends State<RoutePage> {
   }
 
   @override
+  void initState() {
+    UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
+    userUsecase.getUser('uid');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-        leading: Container(
-          padding: const EdgeInsets.all(5.0),
-          child: ClipOval(
-            clipBehavior: Clip.antiAlias,
-            child: Container(
-              decoration: const BoxDecoration(color: Colors.grey),
-            ),
-          ),
-        ),
-      ),
-      body: getPage(_bottomNavIndex),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const AddCasePage(),
-          ));
-        },
-        shape: const CircleBorder(),
-        backgroundColor: Colors.amber,
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-        itemCount: iconList.length,
-        tabBuilder: (int index, bool isActive) {
-          return Icon(
-            iconList[index],
-            size: 24,
-            color: isActive ? Colors.amber : Colors.grey,
-          );
-        },
-        activeIndex: _bottomNavIndex,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.softEdge,
-        leftCornerRadius: 20,
-        rightCornerRadius: 20,
-        onTap: (index) => setState(() => _bottomNavIndex = index),
-      ),
+    return Consumer<UserUsecase>(
+      builder: (context, userUsecase, child) {
+        return userUsecase.userEntity.uid.isEmpty
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.amber,
+                ),
+              )
+            : Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Colors.amber,
+                  leading: Container(
+                    padding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      clipBehavior: Clip.antiAlias,
+                      child: Container(
+                        decoration: const BoxDecoration(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  leadingWidth: 60,
+                  title: Text(userUsecase.userEntity.userName),
+                ),
+                body: getPage(_bottomNavIndex),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AddCasePage(),
+                    ));
+                  },
+                  shape: const CircleBorder(),
+                  backgroundColor: Colors.amber,
+                  child: const Icon(Icons.add),
+                ),
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+                  itemCount: iconList.length,
+                  tabBuilder: (int index, bool isActive) {
+                    return Icon(
+                      iconList[index],
+                      size: 24,
+                      color: isActive ? Colors.amber : Colors.grey,
+                    );
+                  },
+                  activeIndex: _bottomNavIndex,
+                  gapLocation: GapLocation.center,
+                  notchSmoothness: NotchSmoothness.softEdge,
+                  leftCornerRadius: 20,
+                  rightCornerRadius: 20,
+                  onTap: (index) => setState(() => _bottomNavIndex = index),
+                ),
+              );
+      },
     );
   }
 }
