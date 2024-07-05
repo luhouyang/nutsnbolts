@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/user_entity.dart';
+import 'package:nutsnbolts/testdata/test_data.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 
 class FirestoreModel {
@@ -15,7 +16,15 @@ class FirestoreModel {
     return UserEntity.fromMap(doc.data() as Map<String, dynamic>);
   }
 
-  Future<void> addCase(CaseEntity caseEntity, UserUsecase userUsecase) async {
+  Future<void> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase) async {
+    CaseEntity caseEntity = TestData.caseEntity;
+
+    caseEntity.caseTitle = controllers['caseTitle'].text;
+    caseEntity.caseDesc = controllers['caseDesc'].text;
+
+    caseEntity.clientName = userUsecase.userEntity.userName;
+    caseEntity.clientPhoneNo = userUsecase.userEntity.phoneNo;
+
     String docId = firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc().id;
     await firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc(docId).set(caseEntity.toMap());
   }
