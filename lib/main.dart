@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nutsnbolts/pages/route_page.dart';
+import 'package:nutsnbolts/usecases/user_usecase.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,13 +12,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (context) => UserUsecase(),
         ),
-      ),
+      ],
+      child: const MaterialApp(
+          debugShowCheckedModeBanner: false, home: RoutePage()),
     );
   }
 }
