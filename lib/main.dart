@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
         ),
       ],
       child: const MaterialApp(
-          debugShowCheckedModeBanner: false, home: const AuthGate()),
+          debugShowCheckedModeBanner: false, home: const RoutePage()),
     );
   }
 }

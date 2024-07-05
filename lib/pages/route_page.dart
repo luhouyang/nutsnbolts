@@ -14,12 +14,7 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
-  static List<IconData> iconList = const [
-    Icons.home_outlined,
-    Icons.handyman_rounded,
-    Icons.attach_money_rounded,
-    Icons.person
-  ];
+  static List<IconData> iconList = const [Icons.home_outlined, Icons.handyman_rounded, Icons.attach_money_rounded, Icons.person];
 
   int _bottomNavIndex = 0;
 
@@ -39,7 +34,18 @@ class _RoutePageState extends State<RoutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.amber,
+        leading: Container(
+          padding: const EdgeInsets.all(5.0),
+          child: ClipOval(
+            clipBehavior: Clip.antiAlias,
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.grey),
+            ),
+          ),
+        ),
+      ),
       body: getPage(_bottomNavIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
