@@ -4,7 +4,6 @@ import 'package:nutsnbolts/firebase_options.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:provider/provider.dart';
 import 'package:nutsnbolts/pages/auth_page.dart';
-import 'package:nutsnbolts/pages/route_page.dart';
 
 void main() async {
   // Make sure Flutter is fully initialized then load firebase options
@@ -28,7 +27,7 @@ class MainApp extends StatelessWidget {
         ),
       ],
       child: const MaterialApp(
-          debugShowCheckedModeBanner: false, home: const RoutePage()),
+          debugShowCheckedModeBanner: false, home: AuthGate()),
     );
   }
 }
