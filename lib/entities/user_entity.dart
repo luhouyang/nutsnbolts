@@ -10,6 +10,7 @@ class UserEntity {
   String specialty;
   double rating;
   int numRating;
+  List<dynamic> nuts;
 
   UserEntity(
       {required this.uid,
@@ -20,7 +21,8 @@ class UserEntity {
       required this.isTechnician,
       required this.specialty,
       required this.rating,
-      required this.numRating});
+      required this.numRating,
+      required this.nuts});
 
   factory UserEntity.fromMap(Map<String, dynamic> map) {
     return UserEntity(
@@ -33,6 +35,7 @@ class UserEntity {
       specialty: map["specialty"],
       rating: double.parse(map["rating"].toString()),
       numRating: map["numRating"],
+      nuts: map["nuts"],
     );
   }
 
@@ -47,6 +50,7 @@ class UserEntity {
       'specialty': specialty,
       'rating': rating,
       'numRating': numRating,
+      'nuts': nuts,
     };
   }
 }
