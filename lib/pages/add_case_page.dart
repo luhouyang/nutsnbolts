@@ -41,7 +41,7 @@ class _AddCasePageState extends State<AddCasePage> {
               MyTextField(hint: "case title", validator: textVerify, controller: caseTitleController),
               MyTextField(hint: "case description", validator: textVerify, controller: caseDescController),
               MyMoneyTextField(controller: moneyController),
-              imagePickerWidget(),
+              imagePickerWidget(), // ui is at line 103-207
               ElevatedButton(
                   onPressed: () async {
                     if (picBytes != null) {
@@ -99,64 +99,10 @@ class _AddCasePageState extends State<AddCasePage> {
         : _previewImages();
   }
 
-  // crop selected image
-  Future _cropImage(XFile pickedFile) async {
-    try {
-      CroppedFile? croppedFile = await ImageCropper().cropImage(
-          sourcePath: pickedFile.path,
-          maxHeight: 1080,
-          maxWidth: 1080,
-          compressFormat: ImageCompressFormat.jpg, // maybe change later, test quality first
-          compressQuality: 40,
-          aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0));
-
-      picFile = File(croppedFile!.path);
-      picBytes = await picFile!.readAsBytes();
-
-      debugPrint(picFile!.path);
-      debugPrint(picFile!.lengthSync().toString());
-
-      setState(() {});
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  // pick image from gallery
-  Future getImageFromGallery() async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: ImageSource.gallery,
-      );
-      if (pickedFile != null) {
-        _cropImage(pickedFile);
-      }
-    } catch (e) {
-      setState(() {
-        _pickImageError = e;
-      });
-    }
-  }
-
-  // take picture with camera
-  Future getImageFromCamera() async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,
-      );
-      if (pickedFile != null) {
-        _cropImage(pickedFile);
-      }
-    } catch (e) {
-      setState(() {
-        _pickImageError = e;
-      });
-    }
-  }
-
   // ui component for pick image button
   Widget _pickImageContainer() {
     return picBytes == null
+        // no image selected view
         ? Center(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
@@ -211,6 +157,7 @@ class _AddCasePageState extends State<AddCasePage> {
               ),
             ),
           )
+        // image selected view
         : Column(
             children: [
               const SizedBox(
@@ -259,6 +206,61 @@ class _AddCasePageState extends State<AddCasePage> {
               ),
             ],
           );
+  }
+
+  // crop selected image
+  Future _cropImage(XFile pickedFile) async {
+    try {
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          maxHeight: 1080,
+          maxWidth: 1080,
+          compressFormat: ImageCompressFormat.jpg, // maybe change later, test quality first
+          compressQuality: 40,
+          aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0));
+
+      picFile = File(croppedFile!.path);
+      picBytes = await picFile!.readAsBytes();
+
+      debugPrint(picFile!.path);
+      debugPrint(picFile!.lengthSync().toString());
+
+      setState(() {});
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  // pick image from gallery
+  Future getImageFromGallery() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
+      if (pickedFile != null) {
+        _cropImage(pickedFile);
+      }
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
+  }
+
+  // take picture with camera
+  Future getImageFromCamera() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.camera,
+      );
+      if (pickedFile != null) {
+        _cropImage(pickedFile);
+      }
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
   }
 
   // error handling image
