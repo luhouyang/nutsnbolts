@@ -51,6 +51,10 @@ class FirestoreModel {
     }
   }
 
+  Future<void> signUpTechnician(UserEntity userEntity) async {
+    await firebaseFirestore.collection('users').doc(userEntity.uid).set(userEntity.toMap());
+  }
+
   //
   // case
   //
