@@ -32,7 +32,7 @@ class AuthGate extends StatelessWidget {
           await FirebaseAuth.instance.signInWithCredential(credential);
       return userCredential.user;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -59,7 +59,7 @@ class AuthGate extends StatelessWidget {
                     child: Column(
                       children: [
                         const SizedBox(height: 40),
-                        Container(
+                        SizedBox(
                           height: 200,
                           child: Image.asset('assets/images/logo.png'),
                         ),

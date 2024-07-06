@@ -196,7 +196,7 @@ class _TechnicianPageState extends State<TechnicianPage> {
                               ? Center(
                                   child: Column(
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 50,
                                       ),
                                       SizedBox(
