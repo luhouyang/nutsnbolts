@@ -89,7 +89,7 @@ class _BecomeTechnicianPageState extends State<BecomeTechnicianPage> {
                       padding: EdgeInsets.symmetric(horizontal: 16),
                     ),
                   ),
-                  // Submit button is here!
+                  // Submit button is here! TODO: style this button
                   ElevatedButton(
                       onPressed: () async {
                         // validation
