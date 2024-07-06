@@ -12,7 +12,8 @@ class UserUsecase extends ChangeNotifier {
       phoneNo: " ",
       location: const GeoPoint(0, 0),
       isTechnician: false,
-      rating: 0,
+      rating: 5,
+      numRating: 1,
       specialty: Specialty.homeRepair.value);
 
   Future<void> getUser(String uid) async {

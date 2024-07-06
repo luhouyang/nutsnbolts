@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:nutsnbolts/entities/contents.dart';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
+import 'package:nutsnbolts/entities/case_entity.dart';
+import 'package:nutsnbolts/model/firestore_model.dart';
+import 'package:nutsnbolts/testdata/test_data.dart';
+import 'package:nutsnbolts/usecases/user_usecase.dart';
+import 'package:nutsnbolts/widgets/my_money_field.dart';
+import 'package:provider/provider.dart';
 
 class TechnicianPage extends StatefulWidget {
   const TechnicianPage({super.key});
