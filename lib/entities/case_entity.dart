@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,7 +10,6 @@ enum CaseEntityAttr {
   caseId("caseId"),
   caseTitle("caseTitle"),
   caseDesc("caseDesc"),
-  clientPrice("clientPrice"),
   type("type");
 
   final String value;
@@ -22,10 +22,12 @@ class CaseEntity {
   String caseTitle; // user
   String caseDesc; // user
   Timestamp casePosted; // auto
-  bool status; // true (open), false (closed/taken)
+  int status; // 0 (open), 1 (taken), 2 (complete)
   String type;
   String imageLink;
+  String publicImageLink;
   Uint8List? image;
+  File? imageFile;
 
   // client
   String clientName; // auto
@@ -33,13 +35,14 @@ class CaseEntity {
   GeoPoint caseLocation; // user
 
   // technician
+  String technicianId;
   String technicianName; // technician, auto
   String technicianPhoneNo; // technician, auto
   GeoPoint technicianLocation; // live location of technician when heading to house?
 
   // during negotiation
-  double clientPrice; // user
-  double technicianPrice; // only lowest price gets stored, this price is final price
+  // double technicianPrice; // only lowest price gets stored, this price is final price
+  List<dynamic> technicianPrice;
 
   // after confirm technician
   Timestamp appointment; // user, technician
@@ -55,14 +58,15 @@ class CaseEntity {
       required this.clientName,
       required this.clientPhoneNo,
       required this.caseLocation,
+      required this.technicianId,
       required this.technicianName,
       required this.technicianPhoneNo,
       required this.technicianLocation,
-      required this.clientPrice,
       required this.technicianPrice,
       required this.appointment,
       required this.caseResolvedTime,
-      required this.imageLink});
+      required this.imageLink,
+      required this.publicImageLink});
 
   factory CaseEntity.from(Map<String, dynamic> map) {
     return CaseEntity(
@@ -73,13 +77,14 @@ class CaseEntity {
       status: map["status"],
       type: map["type"],
       imageLink: map["imageLink"],
+      publicImageLink: map["publicImageLink"],
       clientName: map["clientName"],
       clientPhoneNo: map["clientPhoneNo"],
       caseLocation: map["caseLocation"] as GeoPoint,
+      technicianId: map["technicianId"],
       technicianName: map["technicianName"],
       technicianPhoneNo: map["technicianPhoneNo"],
       technicianLocation: map["technicianLocation"],
-      clientPrice: map["clientPrice"],
       technicianPrice: map["technicianPrice"],
       appointment: map["appointment"] as Timestamp,
       caseResolvedTime: map["caseResolvedTime"] as Timestamp,
@@ -95,13 +100,14 @@ class CaseEntity {
       'status': status,
       'type': type,
       'imageLink': imageLink,
+      'publicImageLink': publicImageLink,
       'clientName': clientName,
       'clientPhoneNo': clientPhoneNo,
       'caseLocation': caseLocation,
+      'technicianId': technicianId,
       'technicianName': technicianName,
       'technicianPhoneNo': technicianPhoneNo,
       'technicianLocation': technicianLocation,
-      'clientPrice': clientPrice,
       'technicianPrice': technicianPrice,
       'appointment': appointment,
       'caseResolvedTime': caseResolvedTime,

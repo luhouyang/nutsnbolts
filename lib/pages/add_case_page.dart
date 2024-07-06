@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dart_openai/dart_openai.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
+import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
-import 'package:nutsnbolts/widgets/my_money_field.dart';
 import 'package:provider/provider.dart';
 
 class AddCasePage extends StatefulWidget {
@@ -21,7 +22,6 @@ class AddCasePage extends StatefulWidget {
 class _AddCasePageState extends State<AddCasePage> {
   TextEditingController caseTitleController = TextEditingController();
   TextEditingController caseDescController = TextEditingController();
-  TextEditingController moneyController = TextEditingController(text: "0.0");
 
   String? serviceType;
   final _formKey = GlobalKey<FormState>();
@@ -31,7 +31,6 @@ class _AddCasePageState extends State<AddCasePage> {
     Map<String, dynamic> controllers = {
       CaseEntityAttr.caseTitle.value: caseTitleController,
       CaseEntityAttr.caseDesc.value: caseDescController,
-      CaseEntityAttr.clientPrice.value: moneyController
     };
 
     return Scaffold(
@@ -40,7 +39,7 @@ class _AddCasePageState extends State<AddCasePage> {
           return Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -99,7 +98,6 @@ class _AddCasePageState extends State<AddCasePage> {
                       ),
                     ),
                   ),
-                  MyMoneyTextField(controller: moneyController),
                   imagePickerWidget(), // ui is at line 220-326
                   DropdownButtonFormField2<String>(
                     isExpanded: true,
@@ -158,18 +156,39 @@ class _AddCasePageState extends State<AddCasePage> {
                       padding: EdgeInsets.symmetric(horizontal: 16),
                     ),
                   ),
+                  // Submit button is here!
                   ElevatedButton(
                       onPressed: () async {
+                        // validation
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                         }
+                        // check for image
                         if (picBytes != null) {
-                          await FirestoreModel().addCase(controllers, userUsecase, picBytes!, picFile!.path).then(
-                            (value) {
-                              Navigator.of(context).pop();
+                          // post image/case
+                          await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
+                            (CaseEntity caseEntity) {
+                              // pass CaseEntity to ChatPage for OpenAI API call
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                builder: (context) => ChatPage(caseEntity: caseEntity),
+                              ));
                             },
                           );
                         }
+                        // // makeApiCall() function is at the bottom of the file
+                        // // please check if this implmementation is correct
+                        // if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        //   makeApiCall().then((response) {
+                        //     Navigator.of(context).pop();
+                        //     ScaffoldMessenger.of(context).showSnackBar(
+                        //       const SnackBar(
+                        //         content: Text("Case added successfully"),
+                        //       ),
+                        //     );
+                        //   }).catchError((error) {
+                        //     // Handle any errors here
+                        //   });
+                        // }
                       },
                       child: const Text("submit"))
                 ],
@@ -225,8 +244,8 @@ class _AddCasePageState extends State<AddCasePage> {
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
               child: Container(
                 padding: const EdgeInsets.all(8.0),
-                height: MediaQuery.of(context).size.width * 0.7,
-                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.width * 0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -278,47 +297,45 @@ class _AddCasePageState extends State<AddCasePage> {
         : Column(
             children: [
               const SizedBox(
-                height: 50,
+                height: 25,
               ),
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        height: MediaQuery.of(context).size.width,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
-                        child: Container(
-                          height: 400,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              15,
-                            ),
-                          ),
-                          child: Image.memory(picBytes!),
-                        ),
-                      ),
-                      Positioned(
-                        top: -12,
-                        left: -12,
-                        child: IconButton(
-                          onPressed: () {
-                            picFile = null;
-                            picBytes = null;
-                            setState(() {});
-                          },
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: Colors.red,
-                            size: 25,
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8.0),
+                      height: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
+                      child: Container(
+                        height: 400,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            15,
                           ),
                         ),
+                        child: Image.memory(picBytes!),
                       ),
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      top: -11,
+                      left: -11,
+                      child: IconButton(
+                        onPressed: () {
+                          picFile = null;
+                          picBytes = null;
+                          setState(() {});
+                        },
+                        icon: const Icon(
+                          Icons.cancel,
+                          color: Colors.red,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -333,7 +350,7 @@ class _AddCasePageState extends State<AddCasePage> {
           maxHeight: 1080,
           maxWidth: 1080,
           compressFormat: ImageCompressFormat.jpg, // maybe change later, test quality first
-          compressQuality: 40,
+          compressQuality: 30,
           aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0));
 
       picFile = File(croppedFile!.path);
@@ -409,4 +426,55 @@ class _AddCasePageState extends State<AddCasePage> {
     }
   }
   // end of pictures code
+}
+
+makeApiCall() async {
+  // the system message that will be sent to the request.
+  final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+    content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        "return any message you are given as JSON.",
+      ),
+    ],
+    role: OpenAIChatMessageRole.assistant,
+  );
+
+  // the user message that will be sent to the request.
+  final userMessage = OpenAIChatCompletionChoiceMessageModel(
+    content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        "Hello, I am a chatbot created by OpenAI. How are you today?", // TODO: Engineer a custom prompt for the image case analysis
+      ),
+
+      //! image url contents are allowed only for models with image support such gpt-4.
+      OpenAIChatCompletionChoiceMessageContentItemModel.imageUrl(
+        "https://placehold.co/600x400", // TODO: Send the image that was picked by the user
+      ),
+    ],
+    role: OpenAIChatMessageRole.user,
+  );
+
+// all messages to be sent.
+  final requestMessages = [
+    systemMessage,
+    userMessage,
+  ];
+
+// the actual request.
+  OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+    model: "gpt-3.5-turbo-1106", // TODO: Change model to GPT-4
+    responseFormat: {"type": "json_object"},
+    seed: 6,
+    messages: requestMessages,
+    temperature: 0.2,
+    maxTokens: 500,
+  );
+
+  // print the response.
+
+  // TODO: Handle the response from the API and put it into a case chat
+  print(chatCompletion.choices.first.message); // ...
+  print(chatCompletion.systemFingerprint); // ...
+  print(chatCompletion.usage.promptTokens); // ...
+  print(chatCompletion.id); // ...
 }
