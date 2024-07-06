@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
               .doc(userUsecase.userEntity.uid)
               .collection('cases')
               .orderBy('casePosted', descending: true)
+              .limit(5)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {

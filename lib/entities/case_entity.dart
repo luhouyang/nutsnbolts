@@ -3,31 +3,41 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // inside each case, after confirming technician
 // there will be collection named "message"
 
+enum CaseEntityAttr {
+  caseId("caseId"),
+  caseTitle("caseTitle"),
+  caseDesc("caseDesc"),
+  clientPrice("clientPrice");
+
+  final String value;
+  const CaseEntityAttr(this.value);
+}
+
 class CaseEntity {
   // case
-  String caseId;
-  String caseTitle;
-  String caseDesc;
-  Timestamp casePosted;
+  String caseId; // auto
+  String caseTitle; // user
+  String caseDesc; // user
+  Timestamp casePosted; // auto
   bool status; // true (open), false (closed/taken)
 
   // client
-  String clientName;
-  String clientPhoneNo;
-  GeoPoint caseLocation;
+  String clientName; // auto
+  String clientPhoneNo; // auto
+  GeoPoint caseLocation; // user
 
   // technician
-  String technicianName;
-  String technicianPhoneNo;
+  String technicianName; // technician, auto
+  String technicianPhoneNo; // technician, auto
   GeoPoint technicianLocation; // live location of technician when heading to house?
 
   // during negotiation
-  double clientPrice;
+  double clientPrice; // user
   double technicianPrice; // only lowest price gets stored, this price is final price
 
   // after confirm technician
-  Timestamp appointment;
-  Timestamp caseResolvedTime;
+  Timestamp appointment; // user, technician
+  Timestamp caseResolvedTime; // user
 
   CaseEntity(
       {required this.caseId,

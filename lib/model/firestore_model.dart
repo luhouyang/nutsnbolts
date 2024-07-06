@@ -19,8 +19,9 @@ class FirestoreModel {
   Future<void> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase) async {
     CaseEntity caseEntity = TestData.caseEntity;
 
-    caseEntity.caseTitle = controllers['caseTitle'].text;
-    caseEntity.caseDesc = controllers['caseDesc'].text;
+    caseEntity.caseTitle = controllers[CaseEntityAttr.caseTitle.value].text;
+    caseEntity.caseDesc = controllers[CaseEntityAttr.caseDesc.value].text;
+    caseEntity.clientPrice = double.parse(controllers[CaseEntityAttr.clientPrice.value].text);
 
     caseEntity.clientName = userUsecase.userEntity.userName;
     caseEntity.clientPhoneNo = userUsecase.userEntity.phoneNo;
