@@ -27,7 +27,41 @@ class CaseCard extends StatelessWidget {
           children: [
             SlidableAction(
               borderRadius: BorderRadius.circular(20),
-              onPressed: (context) async {},
+              onPressed: (context) async {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                          backgroundColor: Colors.white,
+                          content: const Text(
+                            "Confirm that case is resolved",
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text(
+                                'Confirm',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () async {
+                                await FirestoreModel().resolveCase(caseEntity).then(
+                                      (value) => Navigator.of(context).pop(),
+                                    );
+                              },
+                            )
+                          ]);
+                    });
+              },
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
               icon: Icons.check_rounded,
@@ -65,8 +99,7 @@ class CaseCard extends StatelessWidget {
               children: [
                 Text(
                   caseEntity.caseTitle,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,12 +112,10 @@ class CaseCard extends StatelessWidget {
                   caseEntity.caseDesc,
                   style: TextStyle(color: Colors.grey[700]),
                 ),
-                Text(
-                    "posted on: ${DateFormat.yMEd().add_jms().format(caseEntity.casePosted.toDate())}"),
+                Text("posted on: ${DateFormat.yMEd().add_jms().format(caseEntity.casePosted.toDate())}"),
                 // Text(
                 //     "lat: ${caseEntity.caseLocation.latitude.toString()} long: ${caseEntity.caseLocation.longitude.toString()}")
-                if (caseEntity.technicianPrice.isNotEmpty &&
-                    caseEntity.status == 0)
+                if (caseEntity.technicianPrice.isNotEmpty && caseEntity.status == 0)
                   PriceSelection(
                     technicianPrice: caseEntity.technicianPrice,
                     caseEntity: caseEntity,
@@ -92,8 +123,7 @@ class CaseCard extends StatelessWidget {
                 if (caseEntity.status == 1)
                   Text(
                     "CHAT WITH TECHNICIAN: ${caseEntity.technicianName}",
-                    style: const TextStyle(
-                        color: Colors.amber, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
                   ),
               ],
             ),
