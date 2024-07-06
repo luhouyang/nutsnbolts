@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/user_entity.dart';
@@ -16,7 +17,7 @@ class FirestoreModel {
     return UserEntity.fromMap(doc.data() as Map<String, dynamic>);
   }
 
-  Future<void> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase) async {
+  Future<void> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase, Uint8List picBytes, String picPath) async {
     CaseEntity caseEntity = TestData.caseEntity;
 
     caseEntity.caseTitle = controllers[CaseEntityAttr.caseTitle.value].text;

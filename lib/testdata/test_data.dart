@@ -8,6 +8,7 @@ class TestData {
       caseDesc: 'caseDesc',
       casePosted: Timestamp.fromDate(DateTime.now()),
       status: false,
+      imageLink: '',
       clientName: 'clientName',
       clientPhoneNo: 'clientPhoneNo',
       caseLocation: const GeoPoint(81.44, 87.65),

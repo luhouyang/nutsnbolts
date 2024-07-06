@@ -4,7 +4,7 @@ import 'package:nutsnbolts/entities/user_entity.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 
 class UserUsecase extends ChangeNotifier {
-  UserEntity userEntity = UserEntity(uid: " ", userName: " ", email: " ", phoneNo: " ", location: const GeoPoint(0, 0), isTechnician: false);
+  UserEntity userEntity = UserEntity(uid: " ", userName: " ", email: " ", phoneNo: " ", location: const GeoPoint(0, 0), isTechnician: false, rating: 0);
 
   Future<void> getUser(String uid) async {
     UserEntity newUserEntity = await FirestoreModel().getUser(uid);
