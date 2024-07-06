@@ -1,13 +1,19 @@
+// Dart imports
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:firebase_storage/firebase_storage.dart';
+
+// Flutter imports
 import 'package:flutter/material.dart';
+
+// Third-party package imports
+import 'package:firebase_storage/firebase_storage.dart';
 
 class StorargeModel {
   static Reference storageRef = FirebaseStorage.instance.ref();
 
   Future postImage(String fileName, String docRef, File file) async {
-    final folderRef = storageRef.child(docRef); // use other filed as duplicates might exist
+    final folderRef =
+        storageRef.child(docRef); // use other filed as duplicates might exist
     final imageRef = folderRef.child(fileName);
 
     try {

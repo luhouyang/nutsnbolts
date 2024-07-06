@@ -1,6 +1,13 @@
+// Dart imports
 import 'dart:convert';
+
+// Flutter imports
 import 'package:flutter/material.dart';
+
+// Third-party package imports
 import 'package:http/http.dart' as http;
+
+// Local project imports
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/env/env.dart';
 

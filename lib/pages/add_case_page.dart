@@ -1,16 +1,23 @@
+// Dart imports
 import 'dart:io';
-import 'package:dart_openai/dart_openai.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+
+// Flutter imports
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Third-party package imports
+import 'package:dart_openai/dart_openai.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
+// Local project imports
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
-import 'package:provider/provider.dart';
 
 class AddCasePage extends StatefulWidget {
   const AddCasePage({super.key});
@@ -166,11 +173,16 @@ class _AddCasePageState extends State<AddCasePage> {
                         // check for image
                         if (picBytes != null) {
                           // post image/case
-                          await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
+                          await FirestoreModel()
+                              .addCase(
+                                  controllers, userUsecase, picFile!, picBytes!)
+                              .then(
                             (CaseEntity caseEntity) {
                               // pass CaseEntity to ChatPage for OpenAI API call
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                builder: (context) => ChatPage(caseEntity: caseEntity),
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                builder: (context) =>
+                                    ChatPage(caseEntity: caseEntity),
                               ));
                             },
                           );
@@ -246,7 +258,9 @@ class _AddCasePageState extends State<AddCasePage> {
                 padding: const EdgeInsets.all(8.0),
                 height: MediaQuery.of(context).size.width * 0.5,
                 width: MediaQuery.of(context).size.width * 0.5,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    border: Border.all(color: Colors.black)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -260,7 +274,8 @@ class _AddCasePageState extends State<AddCasePage> {
                         Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: IconButton(
                                 onPressed: () async {
                                   getImageFromGallery();
@@ -275,7 +290,8 @@ class _AddCasePageState extends State<AddCasePage> {
                         Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: IconButton(
                                 onPressed: () async {
                                   getImageFromCamera();
@@ -307,7 +323,9 @@ class _AddCasePageState extends State<AddCasePage> {
                       padding: const EdgeInsets.all(8.0),
                       height: MediaQuery.of(context).size.width,
                       width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.0),
+                          border: Border.all(color: Colors.black)),
                       child: Container(
                         height: 400,
                         width: 400,
@@ -349,7 +367,8 @@ class _AddCasePageState extends State<AddCasePage> {
           sourcePath: pickedFile.path,
           maxHeight: 1080,
           maxWidth: 1080,
-          compressFormat: ImageCompressFormat.jpg, // maybe change later, test quality first
+          compressFormat:
+              ImageCompressFormat.jpg, // maybe change later, test quality first
           compressQuality: 30,
           aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0));
 

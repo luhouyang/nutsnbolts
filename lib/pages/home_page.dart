@@ -1,19 +1,25 @@
+// Dart imports
 import 'dart:async';
 
+// Flutter imports
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Third-party package imports
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:location/location.dart';
+
+// Local project imports - Entities, services, use cases, utils, widgets
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/services/location_service.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 import 'package:nutsnbolts/widgets/case_card.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -72,11 +78,18 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               "nuts&bolts.",
-                              style: TextStyle(fontFamily: "Poppins", color: MyColours.secondaryColour, fontSize: 28, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColours.secondaryColour,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "Welcome, ${user!.displayName}!",
-                              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 18, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
@@ -112,11 +125,13 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           const Text(
                             "Want something fixed?",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           Text(
                             "Get a technician now!",
-                            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.grey[700]),
                           ),
                         ],
                       ),
@@ -140,7 +155,8 @@ class _HomePageState extends State<HomePage> {
                     .limit(5)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                  if (!snapshot.hasData ||
+                      snapshot.connectionState == ConnectionState.waiting) {
                     return Column(
                       children: [
                         SizedBox(
@@ -160,7 +176,8 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         const Text(
                           "Your Cases",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         const SizedBox(
                           height: 10,
@@ -171,7 +188,8 @@ class _HomePageState extends State<HomePage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.size,
                           itemBuilder: (context, index) {
-                            CaseEntity caseEntity = CaseEntity.from(snapshot.data!.docs[index].data());
+                            CaseEntity caseEntity = CaseEntity.from(
+                                snapshot.data!.docs[index].data());
                             return CaseCard(caseEntity: caseEntity);
                           },
                         ),
@@ -199,7 +217,10 @@ class _HomePageState extends State<HomePage> {
           initialZoom: 18.0,
         ),
         children: [
-          TileLayer(retinaMode: true, urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", subdomains: ['a', 'b', 'c']),
+          TileLayer(
+              retinaMode: true,
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c']),
           // live location, orientation tracker
           currerntLocationandOrientation()
         ],

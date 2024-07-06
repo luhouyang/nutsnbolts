@@ -1,4 +1,7 @@
+// Third-party package imports
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+// Local project imports - Entities
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 
