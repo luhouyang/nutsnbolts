@@ -159,6 +159,13 @@ class FirestoreModel {
     await firebaseFirestore.collection('cases').doc(caseEntity.caseId).delete();
   }
 
+  Future<void> resolveCase(CaseEntity caseEntity) async {
+    caseEntity.status = 2;
+    caseEntity.caseResolvedTime = Timestamp.fromDate(DateTime.now());
+
+    await firebaseFirestore.collection('cases').doc(caseEntity.caseId).set(caseEntity.toMap());
+  }
+
   //
   // chat
   //
