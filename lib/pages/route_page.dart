@@ -6,6 +6,7 @@ import 'package:nutsnbolts/pages/payment_page.dart';
 import 'package:nutsnbolts/pages/profile_page.dart';
 import 'package:nutsnbolts/pages/technician_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
+import 'package:nutsnbolts/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class RoutePage extends StatefulWidget {
@@ -16,7 +17,12 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
-  static List<IconData> iconList = const [Icons.home_outlined, Icons.handyman_rounded, Icons.attach_money_rounded, Icons.person];
+  static List<IconData> iconList = const [
+    Icons.home_outlined,
+    Icons.handyman_rounded,
+    Icons.attach_money_rounded,
+    Icons.person
+  ];
 
   int _bottomNavIndex = 0;
 
@@ -34,38 +40,17 @@ class _RoutePageState extends State<RoutePage> {
   }
 
   @override
-  void initState() {
-    UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
-    userUsecase.getUser('uid');
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Consumer<UserUsecase>(
       builder: (context, userUsecase, child) {
         return userUsecase.userEntity.uid.isEmpty
-            ? const Center(
+            ? Center(
                 child: CircularProgressIndicator(
-                  color: Colors.amber,
+                  color: MyColours.primaryColour,
                 ),
               )
             : Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.amber,
-                  leading: Container(
-                    padding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      clipBehavior: Clip.antiAlias,
-                      child: Container(
-                        decoration: const BoxDecoration(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  leadingWidth: 60,
-                  title: Text(userUsecase.userEntity.userName),
-                ),
+                backgroundColor: const Color(0xfff8f9fd),
                 body: getPage(_bottomNavIndex),
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
@@ -74,17 +59,18 @@ class _RoutePageState extends State<RoutePage> {
                     ));
                   },
                   shape: const CircleBorder(),
-                  backgroundColor: Colors.amber,
+                  backgroundColor: MyColours.primaryColour,
                   child: const Icon(Icons.add),
                 ),
-                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
                 bottomNavigationBar: AnimatedBottomNavigationBar.builder(
                   itemCount: iconList.length,
                   tabBuilder: (int index, bool isActive) {
                     return Icon(
                       iconList[index],
                       size: 24,
-                      color: isActive ? Colors.amber : Colors.grey,
+                      color: isActive ? MyColours.primaryColour : Colors.grey,
                     );
                   },
                   activeIndex: _bottomNavIndex,

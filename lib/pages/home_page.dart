@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
+import 'package:nutsnbolts/utils/constants.dart';
+import 'package:nutsnbolts/widgets/case_card.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,52 +16,149 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
+    userUsecase.getUser('uid');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<UserUsecase>(
       builder: (context, userUsecase, child) {
-        return StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('users')
-              .doc(userUsecase.userEntity.uid)
-              .collection('cases')
-              .orderBy('casePosted', descending: true)
-              .limit(5)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(25, 50, 25, 25),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    Colors.amber,
+                    Colors.amber[800]!,
+                  ],
+                )),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "nuts & bolts.",
+                              style: TextStyle(
+                                  color: MyColours.secondaryColour,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "Welcome, ${userUsecase.userEntity.userName}!",
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
+                            )
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: MyColours.secondaryColour,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Icon(
+                            Icons.person,
+                            color: MyColours.primaryColour,
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: MyColours.secondaryColour,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Want something fixed?",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
+                          Text(
+                            "Get a technician now!",
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.grey[700]),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(userUsecase.userEntity.uid)
+                    .collection('cases')
+                    .orderBy('casePosted', descending: true)
+                    .limit(5)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData ||
+                      snapshot.connectionState == ConnectionState.waiting) {
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                        ),
+                        CircularProgressIndicator(
+                          color: MyColours.primaryColour,
+                        ),
+                      ],
+                    );
+                  }
 
-            return ListView.builder(
-              itemCount: snapshot.data!.size,
-              itemBuilder: (context, index) {
-                CaseEntity caseEntity = CaseEntity.from(snapshot.data!.docs[index].data());
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(25, 25, 25, 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          caseEntity.caseTitle,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        const Text(
+                          "Your Cases",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [Text(caseEntity.clientName), Text(caseEntity.clientPhoneNo)],
+                        const SizedBox(
+                          height: 10,
                         ),
-                        Text(caseEntity.caseDesc),
-                        Text("posted on: ${DateFormat.yMEd().add_jms().format(caseEntity.casePosted.toDate())}"),
-                        Text("lat: ${caseEntity.caseLocation.latitude.toString()} long: ${caseEntity.caseLocation.longitude.toString()}")
+                        ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: snapshot.data!.size,
+                          itemBuilder: (context, index) {
+                            CaseEntity caseEntity = CaseEntity.from(
+                                snapshot.data!.docs[index].data());
+                            return CaseCard(caseEntity: caseEntity);
+                          },
+                        ),
                       ],
                     ),
-                  ),
-                );
-              },
-            );
-          },
+                  );
+                },
+              ),
+            ],
+          ),
         );
       },
     );
