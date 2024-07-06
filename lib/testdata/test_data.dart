@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
+import 'package:nutsnbolts/entities/enums/enums.dart';
 
 class TestData {
   static CaseEntity caseEntity = CaseEntity(
@@ -8,6 +9,7 @@ class TestData {
       caseDesc: 'caseDesc',
       casePosted: Timestamp.fromDate(DateTime.now()),
       status: false,
+      type: Specialty.homeRepair.value,
       imageLink: '',
       clientName: 'clientName',
       clientPhoneNo: 'clientPhoneNo',

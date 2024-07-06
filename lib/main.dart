@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nutsnbolts/firebase_options.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:provider/provider.dart';
-// import 'package:nutsnbolts/pages/route_page.dart';
+import 'package:nutsnbolts/pages/route_page.dart';
 import 'package:nutsnbolts/pages/auth_page.dart';
 
 void main() async {
@@ -27,8 +27,10 @@ class MainApp extends StatelessWidget {
           create: (context) => UserUsecase(),
         ),
       ],
-      child: const MaterialApp(
-          debugShowCheckedModeBanner: false, home: AuthGate()),
+      child: MaterialApp(
+          theme: ThemeData(fontFamily: 'RobotoCondensed'),
+          debugShowCheckedModeBanner: false,
+          home: const RoutePage()),
     );
   }
 }
