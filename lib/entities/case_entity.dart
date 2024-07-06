@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // inside each case, after confirming technician
@@ -20,6 +22,8 @@ class CaseEntity {
   String caseDesc; // user
   Timestamp casePosted; // auto
   bool status; // true (open), false (closed/taken)
+  String imageLink;
+  Uint8List? image;
 
   // client
   String clientName; // auto
@@ -54,7 +58,8 @@ class CaseEntity {
       required this.clientPrice,
       required this.technicianPrice,
       required this.appointment,
-      required this.caseResolvedTime});
+      required this.caseResolvedTime,
+      required this.imageLink});
 
   factory CaseEntity.from(Map<String, dynamic> map) {
     return CaseEntity(
@@ -63,6 +68,7 @@ class CaseEntity {
       caseDesc: map["caseDesc"],
       casePosted: map["casePosted"] as Timestamp,
       status: map["status"],
+      imageLink: map["imageLink"],
       clientName: map["clientName"],
       clientPhoneNo: map["clientPhoneNo"],
       caseLocation: map["caseLocation"] as GeoPoint,
@@ -83,6 +89,7 @@ class CaseEntity {
       'caseDesc': caseDesc,
       'casePosted': casePosted,
       'status': status,
+      'imageLink': imageLink,
       'clientName': clientName,
       'clientPhoneNo': clientPhoneNo,
       'caseLocation': caseLocation,

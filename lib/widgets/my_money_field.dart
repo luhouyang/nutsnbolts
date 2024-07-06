@@ -39,12 +39,9 @@ class MoneyFormatter extends TextInputFormatter {
   final String separator;
   MoneyFormatter({
     required this.separator,
-  }) {
-    assert(separator != null);
-  }
+  });
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     newValue = TextEditingValue(
       text: int.tryParse(newValue.text.replaceAll(".", "")).toString(),
       selection: TextSelection.collapsed(
@@ -54,8 +51,7 @@ class MoneyFormatter extends TextInputFormatter {
     debugPrint(newValue.text);
     if (newValue.text.length > 2) {
       return TextEditingValue(
-        text:
-            '${newValue.text.substring(0, newValue.text.length - 2)}$separator${newValue.text.substring(newValue.text.length - 2)}',
+        text: '${newValue.text.substring(0, newValue.text.length - 2)}$separator${newValue.text.substring(newValue.text.length - 2)}',
         selection: TextSelection.collapsed(
           offset: newValue.selection.end + 1,
         ),

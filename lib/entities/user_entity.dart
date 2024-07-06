@@ -7,9 +7,16 @@ class UserEntity {
   String phoneNo;
   GeoPoint location;
   bool isTechnician;
+  double rating;
 
   UserEntity(
-      {required this.uid, required this.userName, required this.email, required this.phoneNo, required this.location, required this.isTechnician});
+      {required this.uid,
+      required this.userName,
+      required this.email,
+      required this.phoneNo,
+      required this.location,
+      required this.isTechnician,
+      required this.rating});
 
   factory UserEntity.fromMap(Map<String, dynamic> map) {
     return UserEntity(
@@ -19,6 +26,7 @@ class UserEntity {
       phoneNo: map["phoneNo"],
       location: map["location"] as GeoPoint,
       isTechnician: map["isTechnician"],
+      rating: double.parse(map["rating"].toString()),
     );
   }
 
@@ -30,6 +38,7 @@ class UserEntity {
       'phoneNo': phoneNo,
       'location': location,
       'isTechnician': isTechnician,
+      'rating': rating,
     };
   }
 }
