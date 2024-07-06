@@ -14,6 +14,7 @@ class TestData {
       clientName: 'clientName',
       clientPhoneNo: 'clientPhoneNo',
       caseLocation: const GeoPoint(81.44, 87.65),
+      technicianId: '',
       technicianName: 'technicianName',
       technicianPhoneNo: 'technicianPhoneNo',
       technicianLocation: const GeoPoint(82.44, 87.05),

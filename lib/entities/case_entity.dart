@@ -34,6 +34,7 @@ class CaseEntity {
   GeoPoint caseLocation; // user
 
   // technician
+  String technicianId;
   String technicianName; // technician, auto
   String technicianPhoneNo; // technician, auto
   GeoPoint technicianLocation; // live location of technician when heading to house?
@@ -56,6 +57,7 @@ class CaseEntity {
       required this.clientName,
       required this.clientPhoneNo,
       required this.caseLocation,
+      required this.technicianId,
       required this.technicianName,
       required this.technicianPhoneNo,
       required this.technicianLocation,
@@ -76,6 +78,7 @@ class CaseEntity {
       clientName: map["clientName"],
       clientPhoneNo: map["clientPhoneNo"],
       caseLocation: map["caseLocation"] as GeoPoint,
+      technicianId: map["technicianId"],
       technicianName: map["technicianName"],
       technicianPhoneNo: map["technicianPhoneNo"],
       technicianLocation: map["technicianLocation"],
@@ -97,6 +100,7 @@ class CaseEntity {
       'clientName': clientName,
       'clientPhoneNo': clientPhoneNo,
       'caseLocation': caseLocation,
+      'technicianId': technicianId,
       'technicianName': technicianName,
       'technicianPhoneNo': technicianPhoneNo,
       'technicianLocation': technicianLocation,

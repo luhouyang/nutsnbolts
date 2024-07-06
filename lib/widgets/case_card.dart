@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/utils/constants.dart';
+import 'package:nutsnbolts/widgets/price_selection.dart';
 
 class CaseCard extends StatelessWidget {
   final CaseEntity caseEntity;
@@ -39,6 +40,7 @@ class CaseCard extends StatelessWidget {
                 "posted on: ${DateFormat.yMEd().add_jms().format(caseEntity.casePosted.toDate())}"),
             // Text(
             //     "lat: ${caseEntity.caseLocation.latitude.toString()} long: ${caseEntity.caseLocation.longitude.toString()}")
+            if (caseEntity.technicianPrice.isNotEmpty) PriceSelection(technicianPrice: caseEntity.technicianPrice),
           ],
         ),
       ),

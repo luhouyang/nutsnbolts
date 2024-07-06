@@ -41,7 +41,7 @@ class FirestoreModel {
           location: GeoPoint(location.latitude!, location.longitude!),
           isTechnician: false,
           specialty: Specialty.homeRepair.value,
-          rating: 0);
+          rating: 5);
 
       await addUser(userEntity);
 
@@ -71,6 +71,7 @@ class FirestoreModel {
         clientName: userUsecase.userEntity.userName,
         clientPhoneNo: userUsecase.userEntity.phoneNo,
         caseLocation: GeoPoint(location.latitude!, location.longitude!),
+        technicianId: '',
         technicianName: '',
         technicianPhoneNo: '',
         technicianLocation: const GeoPoint(0, 0),
@@ -90,5 +91,12 @@ class FirestoreModel {
     caseEntity.imageFile = picFile;
 
     return caseEntity;
+  }
+
+  //
+  // chat
+  //
+  Future<void> updateChat() async {
+
   }
 }

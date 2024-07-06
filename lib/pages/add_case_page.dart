@@ -39,7 +39,7 @@ class _AddCasePageState extends State<AddCasePage> {
           return Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -244,8 +244,8 @@ class _AddCasePageState extends State<AddCasePage> {
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
               child: Container(
                 padding: const EdgeInsets.all(8.0),
-                height: MediaQuery.of(context).size.width * 0.7,
-                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.width * 0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -297,47 +297,45 @@ class _AddCasePageState extends State<AddCasePage> {
         : Column(
             children: [
               const SizedBox(
-                height: 50,
+                height: 25,
               ),
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        height: MediaQuery.of(context).size.width,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
-                        child: Container(
-                          height: 400,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              15,
-                            ),
-                          ),
-                          child: Image.memory(picBytes!),
-                        ),
-                      ),
-                      Positioned(
-                        top: -12,
-                        left: -12,
-                        child: IconButton(
-                          onPressed: () {
-                            picFile = null;
-                            picBytes = null;
-                            setState(() {});
-                          },
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: Colors.red,
-                            size: 25,
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8.0),
+                      height: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
+                      child: Container(
+                        height: 400,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            15,
                           ),
                         ),
+                        child: Image.memory(picBytes!),
                       ),
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      top: -11,
+                      left: -11,
+                      child: IconButton(
+                        onPressed: () {
+                          picFile = null;
+                          picBytes = null;
+                          setState(() {});
+                        },
+                        icon: const Icon(
+                          Icons.cancel,
+                          color: Colors.red,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
