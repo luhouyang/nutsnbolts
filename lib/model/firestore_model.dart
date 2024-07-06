@@ -110,7 +110,15 @@ class FirestoreModel {
     await firebaseFirestore.collection('cases').doc(caseEntity.caseId).set(caseEntity.toMap());
   }
 
-  Future<void> confirmTechnician(BidEntity bidEntity) async {}
+  Future<void> confirmTechnician(BidEntity bidEntity, CaseEntity caseEntity) async {
+    caseEntity.technicianId = bidEntity.technicianId;
+    caseEntity.technicianName = bidEntity.technicianName;
+    caseEntity.finalPrice = bidEntity.price;
+    caseEntity.status = 1;
+
+    // post at firestore
+    await firebaseFirestore.collection('cases').doc(caseEntity.caseId).set(caseEntity.toMap());
+  }
 
   //
   // chat
