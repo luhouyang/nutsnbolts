@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(25, 50, 25, 25),
+                padding: const EdgeInsets.fromLTRB(25, 50, 25, 15),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                   begin: Alignment.topRight,
@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> {
                         //     color: MyColours.primaryColour,
                         //   ),
                         // )
+
                         SizedBox(
                           height: 50,
                           child: ClipRRect(
@@ -130,13 +131,33 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
-                child: map ??
-                    LoadingAnimationWidget.beat(
-                      size: 60,
-                      color: Colors.amber,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Jobs Near You",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: map ??
+                            LoadingAnimationWidget.beat(
+                              size: 60,
+                              color: Colors.amber,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -150,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                     return Column(
                       children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
+                          height: MediaQuery.of(context).size.height / 5,
                         ),
                         CircularProgressIndicator(
                           color: MyColours.primaryColour,
@@ -177,7 +198,9 @@ class _HomePageState extends State<HomePage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.size,
                           itemBuilder: (context, index) {
-                            CaseEntity caseEntity = CaseEntity.from(snapshot.data!.docs[index].data());
+                            CaseEntity caseEntity = CaseEntity.from(
+                                snapshot.data!.docs[index].data());
+
                             return CaseCard(caseEntity: caseEntity);
                           },
                         ),

@@ -27,8 +27,10 @@ class _TechnicianPageState extends State<TechnicianPage> {
   final List<SwipeItem> _swipeItems = <SwipeItem>[];
   MatchEngine? _matchEngine;
 
-  final ValueNotifier<Color> _crossButtonColor = ValueNotifier<Color>(Colors.grey[300]!);
-  final ValueNotifier<Color> _checkButtonColor = ValueNotifier<Color>(Colors.grey[300]!);
+  final ValueNotifier<Color> _crossButtonColor =
+      ValueNotifier<Color>(Colors.grey[300]!);
+  final ValueNotifier<Color> _checkButtonColor =
+      ValueNotifier<Color>(Colors.grey[300]!);
   bool _isStackFinished = false;
 
   @override
@@ -55,8 +57,10 @@ class _TechnicianPageState extends State<TechnicianPage> {
                   child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const BecomeTechnicianPage(),
-                        ));
+                          
+                        builder: (context) => const BecomeTechnicianPage(),
+                        
+                      ));
                       },
                       child: const Text("Become A Technician")),
                 )
@@ -78,16 +82,23 @@ class _TechnicianPageState extends State<TechnicianPage> {
                       ),
                       child: Text(
                         "Find A Job",
-                        style: TextStyle(color: MyColours.secondaryColour, fontSize: 24, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          color: MyColours.secondaryColour,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(
                       height: 25,
                     ),
                     StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection('cases').orderBy('casePosted', descending: true).snapshots(),
+                      stream: FirebaseFirestore.instance
+                        .collection('cases')
+                        .orderBy('casePosted', descending: true)
+                        .snapshots(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                        if (!snapshot.hasData ||
+                          snapshot.connectionState == ConnectionState.waiting) {
                           return Column(
                             children: [
                               SizedBox(
@@ -151,13 +162,15 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                   },
                                 );
 
-                                Future.delayed(const Duration(milliseconds: 500), () {
+                                Future.delayed(const Duration(milliseconds: 500),
+                                () {
                                   _checkButtonColor.value = Colors.grey[300]!;
                                 });
                               },
                               nopeAction: () {
                                 _crossButtonColor.value = Colors.red;
-                                Future.delayed(const Duration(milliseconds: 500), () {
+                                Future.delayed(const Duration(milliseconds: 500),
+                                () {
                                   _crossButtonColor.value = Colors.grey[300]!;
                                 });
                               },
@@ -167,149 +180,147 @@ class _TechnicianPageState extends State<TechnicianPage> {
                         }
 
                         _matchEngine = MatchEngine(swipeItems: _swipeItems);
-
-                        return (_isStackFinished)
-                            ? const Center(
-                                child: Text("Stack is Finished"),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 25),
-                                child: Stack(children: [
-                                  SwipeCards(
-                                    matchEngine: _matchEngine!,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      CaseEntity caseEntity = _swipeItems[index].content as CaseEntity;
-                                      return Stack(
-                                        children: [
-                                          Container(
-                                            height: (MediaQuery.of(context).size.height / 3) * 1.8,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey[200],
-                                              borderRadius: BorderRadius.circular(20),
-                                              image: DecorationImage(
-                                                image: NetworkImage(
-                                                  caseEntity.publicImageLink,
-                                                ),
-                                                fit: BoxFit.cover,
+                      return (_isStackFinished)
+                          ? const Center(
+                              child: Text("Stack is Finished"),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Stack(children: [
+                                SwipeCards(
+                                  matchEngine: _matchEngine!,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    CaseEntity caseEntity = _swipeItems[index].content as CaseEntity;
+                                    return Stack(
+                                      children: [
+                                        Container(
+                                          height: (MediaQuery.of(context).size.height / 3) * 1.8,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius: BorderRadius.circular(20),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                caseEntity.publicImageLink,
                                               ),
+                                              fit: BoxFit.cover,
                                             ),
                                           ),
-                                          Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Container(
-                                                padding: const EdgeInsets.all(15),
-                                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white.withOpacity(0.9),
-                                                  borderRadius: BorderRadius.circular(20),
-                                                ),
-                                                child: SizedBox(
-                                                  width: double.infinity,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      Text(
-                                                        caseEntity.caseTitle,
-                                                        style: const TextStyle(
-                                                          fontSize: 22,
-                                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(15),
+                                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withOpacity(0.9),
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      caseEntity.caseTitle,
+                                                      style: const TextStyle(
+                                                        fontSize: 22,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      caseEntity.caseDesc,
+                                                      style: const TextStyle(fontSize: 16),
+                                                    ),
+                                                    const Divider(),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          caseEntity.clientName,
+                                                          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        caseEntity.caseDesc,
-                                                        style: const TextStyle(fontSize: 16),
-                                                      ),
-                                                      const Divider(),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            caseEntity.clientName,
-                                                            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                                                          ),
-                                                          Text(
-                                                            DateFormat('dd/MM/yyyy hh:mm a').format(caseEntity.casePosted.toDate()),
-                                                            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
+                                                        Text(
+                                                          DateFormat('dd/MM/yyyy hh:mm a').format(caseEntity.casePosted.toDate()),
+                                                          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      );
-                                    },
-                                    onStackFinished: () {
-                                      setState(() {
-                                        _isStackFinished = true;
-                                      });
-                                    },
-                                    itemChanged: (SwipeItem item, int index) {
-                                      debugPrint("item: ${(item.content as CaseEntity).caseTitle}, index: $index");
-                                    },
-                                    leftSwipeAllowed: true,
-                                    rightSwipeAllowed: true,
-                                    upSwipeAllowed: false,
-                                    fillSpace: false,
-                                  ),
-                                ]),
-                              );
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ValueListenableBuilder<Color>(
-                          valueListenable: _crossButtonColor,
-                          builder: (context, color, child) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: color,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.close,
-                                  size: 40,
-                                  color: Colors.white,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  onStackFinished: () {
+                                    setState(() {
+                                      _isStackFinished = true;
+                                    });
+                                  },
+                                  itemChanged: (SwipeItem item, int index) {
+                                    debugPrint("item: ${(item.content as CaseEntity).caseTitle}, index: $index");
+                                  },
+                                  leftSwipeAllowed: true,
+                                  rightSwipeAllowed: true,
+                                  upSwipeAllowed: false,
+                                  fillSpace: false,
                                 ),
-                              ),
+                              ]),
                             );
-                          },
-                        ),
-                        ValueListenableBuilder<Color>(
-                          valueListenable: _checkButtonColor,
-                          builder: (context, color, child) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: color,
-                                borderRadius: BorderRadius.circular(50),
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ValueListenableBuilder<Color>(
+                        valueListenable: _crossButtonColor,
+                        builder: (context, color, child) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.close,
+                                size: 40,
+                                color: Colors.white,
                               ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.check, size: 40, color: Colors.white),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    )
-                  ],
-                );
-        },
-      ),
-    );
+                            ),
+                          );
+                        },
+                      ),
+                      ValueListenableBuilder<Color>(
+                        valueListenable: _checkButtonColor,
+                        builder: (context, color, child) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.check, size: 40, color: Colors.white),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              );
+      },
+    ));
   }
 }
