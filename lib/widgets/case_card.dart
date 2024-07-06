@@ -1,5 +1,10 @@
+// Flutter imports
 import 'package:flutter/material.dart';
+
+// Third-party package imports
 import 'package:intl/intl.dart';
+
+// Local project imports
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/utils/constants.dart';
@@ -31,7 +36,8 @@ class CaseCard extends StatelessWidget {
             children: [
               Text(
                 caseEntity.caseTitle,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,10 +50,12 @@ class CaseCard extends StatelessWidget {
                 caseEntity.caseDesc,
                 style: TextStyle(color: Colors.grey[700]),
               ),
-              Text("posted on: ${DateFormat.yMEd().add_jms().format(caseEntity.casePosted.toDate())}"),
+              Text(
+                  "posted on: ${DateFormat.yMEd().add_jms().format(caseEntity.casePosted.toDate())}"),
               // Text(
               //     "lat: ${caseEntity.caseLocation.latitude.toString()} long: ${caseEntity.caseLocation.longitude.toString()}")
-              if (caseEntity.technicianPrice.isNotEmpty) PriceSelection(technicianPrice: caseEntity.technicianPrice),
+              if (caseEntity.technicianPrice.isNotEmpty)
+                PriceSelection(technicianPrice: caseEntity.technicianPrice),
             ],
           ),
         ),

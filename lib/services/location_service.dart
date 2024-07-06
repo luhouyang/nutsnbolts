@@ -1,5 +1,8 @@
+// Flutter imports
 import 'package:flutter/material.dart';
-// import 'package:latlong2/latlong.dart';
+
+// Third-party package imports
+import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
 class LocationService {
