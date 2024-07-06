@@ -45,11 +45,17 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               "nuts & bolts.",
-                              style: TextStyle(color: MyColours.secondaryColour, fontSize: 28, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: MyColours.secondaryColour,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "Welcome, ${user!.displayName}!",
-                              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 18, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
@@ -85,11 +91,13 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           const Text(
                             "Want something fixed?",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           Text(
                             "Get a technician now!",
-                            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.grey[700]),
                           ),
                         ],
                       ),
@@ -106,7 +114,8 @@ class _HomePageState extends State<HomePage> {
                     .limit(5)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                  if (!snapshot.hasData ||
+                      snapshot.connectionState == ConnectionState.waiting) {
                     return Column(
                       children: [
                         SizedBox(
@@ -126,7 +135,8 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         const Text(
                           "Your Cases",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         const SizedBox(
                           height: 10,
@@ -137,7 +147,8 @@ class _HomePageState extends State<HomePage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.size,
                           itemBuilder: (context, index) {
-                            CaseEntity caseEntity = CaseEntity.from(snapshot.data!.docs[index].data());
+                            CaseEntity caseEntity = CaseEntity.from(
+                                snapshot.data!.docs[index].data());
                             return CaseCard(caseEntity: caseEntity);
                           },
                         ),

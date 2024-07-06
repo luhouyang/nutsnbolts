@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dart_openai/dart_openai.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -155,24 +156,38 @@ class _AddCasePageState extends State<AddCasePage> {
                       padding: EdgeInsets.symmetric(horizontal: 16),
                     ),
                   ),
+                  // Submit button is here!
                   ElevatedButton(
                       onPressed: () async {
-
-                        // validation
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                        }
-                        // check for image
-                        if (picBytes != null) {
-                          // post image/case
-                          await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
-                            (CaseEntity caseEntity) {
-                              // pass CaseEntity to ChatPage for OpenAI API call
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                builder: (context) => ChatPage(caseEntity: caseEntity),
-                              ));
-                            },
-                          );
+                        // // validation
+                        // if (_formKey.currentState!.validate()) {
+                        //   _formKey.currentState!.save();
+                        // }
+                        // // check for image
+                        // if (picBytes != null) {
+                        //   // post image/case
+                        //   await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
+                        //     (CaseEntity caseEntity) {
+                        //       // pass CaseEntity to ChatPage for OpenAI API call
+                        //       Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        //         builder: (context) => ChatPage(caseEntity: caseEntity),
+                        //       ));
+                        //     },
+                        //   );
+                        // }
+                        // makeApiCall() function is at the bottom of the file
+                        // please check if this implmementation is correct
+                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                          makeApiCall().then((response) {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Case added successfully"),
+                              ),
+                            );
+                          }).catchError((error) {
+                            // Handle any errors here
+                          });
                         }
                       },
                       child: const Text("submit"))
@@ -413,4 +428,55 @@ class _AddCasePageState extends State<AddCasePage> {
     }
   }
   // end of pictures code
+}
+
+makeApiCall() async {
+  // the system message that will be sent to the request.
+  final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+    content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        "return any message you are given as JSON.",
+      ),
+    ],
+    role: OpenAIChatMessageRole.assistant,
+  );
+
+  // the user message that will be sent to the request.
+  final userMessage = OpenAIChatCompletionChoiceMessageModel(
+    content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        "Hello, I am a chatbot created by OpenAI. How are you today?", // TODO: Engineer a custom prompt for the image case analysis
+      ),
+
+      //! image url contents are allowed only for models with image support such gpt-4.
+      OpenAIChatCompletionChoiceMessageContentItemModel.imageUrl(
+        "https://placehold.co/600x400", // TODO: Send the image that was picked by the user
+      ),
+    ],
+    role: OpenAIChatMessageRole.user,
+  );
+
+// all messages to be sent.
+  final requestMessages = [
+    systemMessage,
+    userMessage,
+  ];
+
+// the actual request.
+  OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+    model: "gpt-3.5-turbo-1106", // TODO: Change model to GPT-4
+    responseFormat: {"type": "json_object"},
+    seed: 6,
+    messages: requestMessages,
+    temperature: 0.2,
+    maxTokens: 500,
+  );
+
+  // print the response.
+
+  // TODO: Handle the response from the API and put it into a case chat
+  print(chatCompletion.choices.first.message); // ...
+  print(chatCompletion.systemFingerprint); // ...
+  print(chatCompletion.usage.promptTokens); // ...
+  print(chatCompletion.id); // ...
 }
