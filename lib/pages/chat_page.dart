@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:nutsnbolts/entities/case_entity.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  final CaseEntity caseEntity;
+
+  const ChatPage({super.key, required this.caseEntity});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -10,8 +13,13 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("chat"),
+    return Scaffold(
+      body: Column(
+        children: [
+          Text(widget.caseEntity.toMap().toString()),
+          Image.file(widget.caseEntity.imageFile!)
+        ],
+      ),
     );
   }
 }

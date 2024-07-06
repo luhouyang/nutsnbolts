@@ -1,17 +1,23 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/entities/user_entity.dart';
+import 'package:nutsnbolts/model/storage_model.dart';
 import 'package:nutsnbolts/services/location_service.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 
 class FirestoreModel {
   static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
+  //
+  // user
+  //
   Future<void> addUser(UserEntity userEntity) async {
     await firebaseFirestore.collection('users').doc(userEntity.uid).set(userEntity.toMap());
   }
@@ -38,34 +44,51 @@ class FirestoreModel {
           rating: 0);
 
       await addUser(userEntity);
-      
+
       return userEntity;
     }
   }
 
-  Future<void> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase, Uint8List picBytes, String picPath) async {
+  //
+  // case
+  //
+  Future<CaseEntity> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase, File picFile, Uint8List picBytes) async {
     LocationData location = await LocationService().getLiveLocation();
 
     String docId = firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc().id;
 
-    CaseEntity caseEntity = CaseEntity(
-      caseId: docId,
-      caseTitle: controllers[CaseEntityAttr.caseTitle.value].text,
-      caseDesc: controllers[CaseEntityAttr.caseDesc.value].text,
-      casePosted: Timestamp.fromDate(DateTime.now()),
-      status: 0,
-      type: Specialty.homeRepair.value,
-      imageLink: '',
-      clientName: userUsecase.userEntity.userName,
-      clientPhoneNo: userUsecase.userEntity.phoneNo,
-      caseLocation: GeoPoint(location.latitude!, location.longitude!),
-      technicianName: '',
-      technicianPhoneNo: '',
-      technicianLocation: const GeoPoint(0, 0),
-      technicianPrice: [],
-      appointment: Timestamp.fromDate(DateTime.now()),
-      caseResolvedTime: Timestamp.fromDate(DateTime.now()));
+    String imagePath = "$docId${p.extension(picFile.path)}";
+    debugPrint(imagePath);
 
-    await firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc(docId).set(caseEntity.toMap());
+    CaseEntity caseEntity = CaseEntity(
+        caseId: docId,
+        caseTitle: controllers[CaseEntityAttr.caseTitle.value].text,
+        caseDesc: controllers[CaseEntityAttr.caseDesc.value].text,
+        casePosted: Timestamp.fromDate(DateTime.now()),
+        status: 0,
+        type: Specialty.homeRepair.value,
+        imageLink: imagePath,
+        clientName: userUsecase.userEntity.userName,
+        clientPhoneNo: userUsecase.userEntity.phoneNo,
+        caseLocation: GeoPoint(location.latitude!, location.longitude!),
+        technicianName: '',
+        technicianPhoneNo: '',
+        technicianLocation: const GeoPoint(0, 0),
+        technicianPrice: [],
+        appointment: Timestamp.fromDate(DateTime.now()),
+        caseResolvedTime: Timestamp.fromDate(DateTime.now()));
+
+    // post at firestore
+    await firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc(docId).set(caseEntity.toMap()).then(
+      (value) async {
+        // post image at storage
+        await StorargeModel().postImage(imagePath, userUsecase.userEntity.uid, picFile);
+      },
+    );
+
+    caseEntity.image = picBytes;
+    caseEntity.imageFile = picFile;
+
+    return caseEntity;
   }
 }

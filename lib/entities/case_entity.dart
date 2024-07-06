@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,6 +26,7 @@ class CaseEntity {
   String type;
   String imageLink;
   Uint8List? image;
+  File? imageFile;
 
   // client
   String clientName; // auto

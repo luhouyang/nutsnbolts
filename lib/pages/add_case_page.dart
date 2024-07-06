@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
+import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:provider/provider.dart';
 
@@ -156,13 +157,20 @@ class _AddCasePageState extends State<AddCasePage> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
+
+                        // validation
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                         }
+                        // check for image
                         if (picBytes != null) {
-                          await FirestoreModel().addCase(controllers, userUsecase, picBytes!, picFile!.path).then(
-                            (value) {
-                              Navigator.of(context).pop();
+                          // post image/case
+                          await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
+                            (CaseEntity caseEntity) {
+                              // pass CaseEntity to ChatPage for OpenAI API call
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                builder: (context) => ChatPage(caseEntity: caseEntity),
+                              ));
                             },
                           );
                         }
@@ -329,7 +337,7 @@ class _AddCasePageState extends State<AddCasePage> {
           maxHeight: 1080,
           maxWidth: 1080,
           compressFormat: ImageCompressFormat.jpg, // maybe change later, test quality first
-          compressQuality: 40,
+          compressQuality: 30,
           aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0));
 
       picFile = File(croppedFile!.path);
