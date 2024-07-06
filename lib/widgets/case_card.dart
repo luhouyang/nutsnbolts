@@ -57,6 +57,11 @@ class CaseCard extends StatelessWidget {
                   technicianPrice: caseEntity.technicianPrice,
                   caseEntity: caseEntity,
                 ),
+              if (caseEntity.status == 1)
+                Text(
+                  "CHAT WITH TECHNICIAN: ${caseEntity.technicianName}",
+                  style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+                ),
             ],
           ),
         ),
