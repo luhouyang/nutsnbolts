@@ -9,7 +9,6 @@ enum CaseEntityAttr {
   caseId("caseId"),
   caseTitle("caseTitle"),
   caseDesc("caseDesc"),
-  clientPrice("clientPrice"),
   type("type");
 
   final String value;
@@ -22,7 +21,7 @@ class CaseEntity {
   String caseTitle; // user
   String caseDesc; // user
   Timestamp casePosted; // auto
-  bool status; // true (open), false (closed/taken)
+  int status; // 0 (open), 1 (taken), 2 (complete)
   String type;
   String imageLink;
   Uint8List? image;
@@ -38,8 +37,8 @@ class CaseEntity {
   GeoPoint technicianLocation; // live location of technician when heading to house?
 
   // during negotiation
-  double clientPrice; // user
-  double technicianPrice; // only lowest price gets stored, this price is final price
+  // double technicianPrice; // only lowest price gets stored, this price is final price
+  List<dynamic> technicianPrice;
 
   // after confirm technician
   Timestamp appointment; // user, technician
@@ -58,7 +57,6 @@ class CaseEntity {
       required this.technicianName,
       required this.technicianPhoneNo,
       required this.technicianLocation,
-      required this.clientPrice,
       required this.technicianPrice,
       required this.appointment,
       required this.caseResolvedTime,
@@ -79,7 +77,6 @@ class CaseEntity {
       technicianName: map["technicianName"],
       technicianPhoneNo: map["technicianPhoneNo"],
       technicianLocation: map["technicianLocation"],
-      clientPrice: map["clientPrice"],
       technicianPrice: map["technicianPrice"],
       appointment: map["appointment"] as Timestamp,
       caseResolvedTime: map["caseResolvedTime"] as Timestamp,
@@ -101,7 +98,6 @@ class CaseEntity {
       'technicianName': technicianName,
       'technicianPhoneNo': technicianPhoneNo,
       'technicianLocation': technicianLocation,
-      'clientPrice': clientPrice,
       'technicianPrice': technicianPrice,
       'appointment': appointment,
       'caseResolvedTime': caseResolvedTime,

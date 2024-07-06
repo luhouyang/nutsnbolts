@@ -5,7 +5,6 @@ import 'package:nutsnbolts/env/env.dart';
 import 'package:nutsnbolts/firebase_options.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:provider/provider.dart';
-import 'package:nutsnbolts/pages/route_page.dart';
 import 'package:nutsnbolts/pages/auth_page.dart';
 
 void main() async {

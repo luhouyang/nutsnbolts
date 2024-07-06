@@ -8,7 +8,7 @@ class TestData {
       caseTitle: 'caseTitle',
       caseDesc: 'caseDesc',
       casePosted: Timestamp.fromDate(DateTime.now()),
-      status: false,
+      status: 0,
       type: Specialty.homeRepair.value,
       imageLink: '',
       clientName: 'clientName',
@@ -17,8 +17,7 @@ class TestData {
       technicianName: 'technicianName',
       technicianPhoneNo: 'technicianPhoneNo',
       technicianLocation: const GeoPoint(82.44, 87.05),
-      clientPrice: 20,
-      technicianPrice: 22.5,
+      technicianPrice: [],
       appointment: Timestamp.fromDate(DateTime.now()),
       caseResolvedTime: Timestamp.fromDate(DateTime.now()));
 }
