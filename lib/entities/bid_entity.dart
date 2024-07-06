@@ -16,7 +16,7 @@ class BidEntity {
       technicianId: map["technicianId"],
       technicianName: map["technicianName"],
       price: map["price"],
-      rating: map["rating"],
+      rating: double.parse(map["rating"].toString()),
     );
   }
 

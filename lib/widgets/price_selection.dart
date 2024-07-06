@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 // Local project imports
 import 'package:nutsnbolts/entities/bid_entity.dart';
+import 'package:nutsnbolts/utils/constants.dart';
 
 class PriceSelection extends StatefulWidget {
   final List<dynamic> technicianPrice;
@@ -32,13 +33,10 @@ class _PriceSelectionState extends State<PriceSelection> {
             DropdownButtonFormField2<BidEntity>(
               isExpanded: true,
               decoration: InputDecoration(
-                // Add Horizontal padding using menuItemStyleData.padding so it matches
-                // the menu padding when button's width is not specified.
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
-                // Add more decoration..
               ),
               hint: const Text(
                 'Choose Technician',
@@ -65,9 +63,7 @@ class _PriceSelectionState extends State<PriceSelection> {
                 }
                 return null;
               },
-              onChanged: (value) {
-                //Do something when selected item is changed.
-              },
+              onChanged: (value) {},
               onSaved: (value) {
                 serviceType = value.toString();
               },
@@ -90,14 +86,20 @@ class _PriceSelectionState extends State<PriceSelection> {
                 padding: EdgeInsets.symmetric(horizontal: 16),
               ),
             ),
-            // Submit button is here!
-            ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                  }
-                },
-                child: const Text("confrim"))
+            SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(10),
+                        backgroundColor: MyColours.primaryColour,
+                        foregroundColor: MyColours.secondaryColour,
+                        shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                      }
+                    },
+                    child: const Text("confrim")))
           ],
         ),
       ),
