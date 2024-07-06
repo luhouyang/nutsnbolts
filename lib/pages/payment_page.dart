@@ -1,6 +1,5 @@
 // Flutter imports
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 
 import '../entities/transaction_entity.dart';
@@ -157,7 +156,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         tileColor: Colors.white,
                         title: Text(
                           transactionList[index].description,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(transactionList[index].username),
                         trailing: Text(
