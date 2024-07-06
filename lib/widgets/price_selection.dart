@@ -110,7 +110,7 @@ class _PriceSelectionState extends State<PriceSelection> {
                       List<BidEntity> l = bidList.where((bid) => bid.technicianId == winningBid).toList();
                       await FirestoreModel().confirmTechnician(l[0], widget.caseEntity);
                     },
-                    child: const Text("confrim")))
+                    child: const Text("Confirm")))
           ],
         ),
       ),

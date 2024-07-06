@@ -19,7 +19,23 @@ class UserUsecase extends ChangeNotifier {
       isTechnician: false,
       rating: 5,
       numRating: 1,
-      specialty: Specialty.homeRepair.value);
+      specialty: Specialty.homeRepair.value,
+      nuts: []);
+
+  Future<void> resetUser() async {
+    userEntity = UserEntity(
+        uid: " ",
+        userName: " ",
+        email: " ",
+        phoneNo: " ",
+        location: const GeoPoint(0, 0),
+        isTechnician: false,
+        rating: 5,
+        numRating: 1,
+        specialty: Specialty.homeRepair.value,
+        nuts: []);
+    notifyListeners();
+  }
 
   Future<void> getUser(String uid) async {
     UserEntity newUserEntity = await FirestoreModel().getUser(uid);

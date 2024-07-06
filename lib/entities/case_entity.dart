@@ -80,7 +80,7 @@ class CaseEntity {
       casePosted: map["casePosted"] as Timestamp,
       status: map["status"],
       type: map["type"],
-      finalPrice: map["finalPrice"],
+      finalPrice: double.parse(map["finalPrice"].toString()),
       imageLink: map["imageLink"],
       publicImageLink: map["publicImageLink"],
       clientId: map["clientId"],

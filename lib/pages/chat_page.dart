@@ -36,8 +36,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> _fetchAnalysis() async {
-    const url =
-        'https://api.openai.com/v1/chat/completions'; // Assuming this is the correct endpoint
+    const url = 'https://api.openai.com/v1/chat/completions'; // Assuming this is the correct endpoint
     final apiKey = Env.apiKey;
 
     final headers = {
@@ -78,16 +77,10 @@ class _ChatPageState extends State<ChatPage> {
 
       if (response.statusCode == 200) {
         setState(() {
-          apiResponse =
-              jsonDecode(response.body)['choices'][0]['message']['content'];
+          apiResponse = jsonDecode(response.body)['choices'][0]['message']['content'];
         });
-        MessageEntity messageEntity = MessageEntity(
-            userId: "",
-            userName: "",
-            text: apiResponse!,
-            createdAt: Timestamp.fromDate(DateTime.now()));
-        await FirestoreModel()
-            .updateChat(messageEntity, widget.caseEntity.caseId);
+        MessageEntity messageEntity = MessageEntity(userId: "", userName: "", text: apiResponse!, createdAt: Timestamp.fromDate(DateTime.now()));
+        await FirestoreModel().updateChat(messageEntity, widget.caseEntity.caseId);
       } else {
         setState(() {
           apiResponse = 'Failed to fetch analysis: ${response.reasonPhrase}';
@@ -106,9 +99,7 @@ class _ChatPageState extends State<ChatPage> {
 
     ChatUser user1 = ChatUser(
       id: '1',
-      firstName: userUsecase.userEntity.uid == widget.caseEntity.clientId
-          ? widget.caseEntity.clientName
-          : widget.caseEntity.technicianName,
+      firstName: userUsecase.userEntity.uid == widget.caseEntity.clientId ? widget.caseEntity.clientName : widget.caseEntity.technicianName,
     );
     ChatUser assistant = ChatUser(
       id: '2',
@@ -116,9 +107,7 @@ class _ChatPageState extends State<ChatPage> {
     );
     ChatUser user2 = ChatUser(
       id: '3',
-      firstName: userUsecase.userEntity.uid == widget.caseEntity.clientId
-          ? widget.caseEntity.technicianName
-          : widget.caseEntity.clientName,
+      firstName: userUsecase.userEntity.uid == widget.caseEntity.technicianId ? widget.caseEntity.technicianName : widget.caseEntity.clientName,
     );
 
     return Scaffold(
@@ -135,8 +124,7 @@ class _ChatPageState extends State<ChatPage> {
                 .orderBy('createdAt', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData ||
-                  snapshot.connectionState == ConnectionState.waiting) {
+              if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: LoadingAnimationWidget.beat(
                     size: 60,
@@ -154,30 +142,25 @@ class _ChatPageState extends State<ChatPage> {
               }
 
               List<ChatMessage> messages = <ChatMessage>[
-                ChatMessage(
-                    user: assistant,
-                    createdAt: widget.caseEntity.casePosted.toDate(),
-                    medias: <ChatMedia>[
-                      ChatMedia(
-                          url: widget.caseEntity.publicImageLink,
-                          fileName: widget.caseEntity.imageLink,
-                          type: MediaType.image)
-                    ])
+                ChatMessage(user: assistant, createdAt: widget.caseEntity.casePosted.toDate(), medias: <ChatMedia>[
+                  ChatMedia(url: widget.caseEntity.publicImageLink, fileName: widget.caseEntity.imageLink, type: MediaType.image)
+                ])
               ];
               for (MessageEntity msg in messageEntityList) {
                 if (msg.userId.isNotEmpty) {
-                  messages.add(ChatMessage(
+                  if (msg.userId == userUsecase.userEntity.uid) {
+                    messages.add(ChatMessage(
                       text: msg.text,
-                      user: userUsecase.userEntity.uid ==
-                              widget.caseEntity.clientId
-                          ? user1
-                          : user2,
+                      user: user1,
                       createdAt: msg.createdAt.toDate()));
+                  } else {
+                    messages.add(ChatMessage(
+                      text: msg.text,
+                      user: user2,
+                      createdAt: msg.createdAt.toDate()));
+                  }
                 } else {
-                  messages.add(ChatMessage(
-                      text: msg.text,
-                      user: assistant,
-                      createdAt: msg.createdAt.toDate()));
+                  messages.add(ChatMessage(text: msg.text, user: assistant, createdAt: msg.createdAt.toDate()));
                 }
               }
 
@@ -191,8 +174,7 @@ class _ChatPageState extends State<ChatPage> {
                       userName: userUsecase.userEntity.userName,
                       text: m.text,
                       createdAt: Timestamp.fromDate(DateTime.now()));
-                  FirestoreModel()
-                      .updateChat(messageEntity, widget.caseEntity.caseId);
+                  FirestoreModel().updateChat(messageEntity, widget.caseEntity.caseId);
                   // setState(() {
                   //   messages.insert(0, m);
                   // });

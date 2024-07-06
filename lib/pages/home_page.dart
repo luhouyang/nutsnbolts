@@ -32,6 +32,8 @@ class _HomePageState extends State<HomePage> {
   final StreamController<void> _rebuildStream = StreamController.broadcast();
   FlutterMap? map;
 
+  bool _work = false;
+
   @override
   void initState() {
     _getMap(); // initialize data
@@ -138,8 +140,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     const Text(
                       "Jobs Near You",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     const SizedBox(
                       height: 10,
@@ -159,56 +160,161 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('cases')
-                    .where("clientId", isEqualTo: userUsecase.userEntity.uid)
-                    .orderBy('casePosted', descending: true)
-                    .limit(10)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
-                    return Column(
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 5,
-                        ),
-                        CircularProgressIndicator(
-                          color: MyColours.primaryColour,
-                        ),
-                      ],
-                    );
-                  }
-
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(25, 10, 25, 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Your Cases",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: snapshot.data!.size,
-                          itemBuilder: (context, index) {
-                            CaseEntity caseEntity = CaseEntity.from(
-                                snapshot.data!.docs[index].data());
-
-                            return CaseCard(caseEntity: caseEntity);
-                          },
-                        ),
-                      ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: !_work ? Colors.black : Colors.grey,
+                      elevation: !_work ? 8 : 0,
                     ),
-                  );
-                },
+                    onPressed: () {
+                      if (_work) {
+                        setState(() {
+                          _work = !_work;
+                        });
+                      }
+                    },
+                    child: Text(
+                      "Your Cases",
+                      style: TextStyle(
+                        color: !_work ? Colors.yellow : Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: !_work ? Colors.grey : Colors.black,
+                      elevation: !_work ? 0 : 8,
+                    ),
+                    onPressed: () {
+                      if (!_work) {
+                        setState(() {
+                          _work = !_work;
+                        });
+                      }
+                    },
+                    child: Text(
+                      "Ongoing Work",
+                      style: TextStyle(
+                        color: !_work ? Colors.white : Colors.yellow,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
               ),
+              _work
+                  ? userUsecase.userEntity.nuts.isEmpty
+                      ? const Column(
+                          children: [
+                            SizedBox(
+                              height: 50,
+                            ),
+                            Text(
+                              "No Ongoing Work",
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        )
+                      : StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('cases')
+                              .where(FieldPath.documentId, whereIn: userUsecase.userEntity.nuts)
+                              .orderBy('casePosted', descending: true)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                              return Column(
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height / 5,
+                                  ),
+                                  CircularProgressIndicator(
+                                    color: MyColours.primaryColour,
+                                  ),
+                                ],
+                              );
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(25, 10, 25, 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: snapshot.data!.size,
+                                    itemBuilder: (context, index) {
+                                      CaseEntity caseEntity = CaseEntity.from(snapshot.data!.docs[index].data());
+
+                                      return CaseCard(caseEntity: caseEntity);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                  : StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('cases')
+                          .where("clientId", isEqualTo: userUsecase.userEntity.uid)
+                          .orderBy('casePosted', descending: true)
+                          .limit(10)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                          return Column(
+                            children: [
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height / 5,
+                              ),
+                              CircularProgressIndicator(
+                                color: MyColours.primaryColour,
+                              ),
+                            ],
+                          );
+                        }
+
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(25, 10, 25, 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data!.size,
+                                itemBuilder: (context, index) {
+                                  CaseEntity caseEntity = CaseEntity.from(snapshot.data!.docs[index].data());
+
+                                  return CaseCard(caseEntity: caseEntity);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
             ],
           ),
         );
