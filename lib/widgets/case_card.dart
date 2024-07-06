@@ -7,7 +7,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 // Local project imports
 import 'package:nutsnbolts/entities/case_entity.dart';
-import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 import 'package:nutsnbolts/widgets/price_selection.dart';
 
