@@ -193,8 +193,22 @@ class _TechnicianPageState extends State<TechnicianPage> {
 
                           _matchEngine = MatchEngine(swipeItems: _swipeItems);
                           return (_isStackFinished)
-                              ? const Center(
-                                  child: Text("Stack is Finished"),
+                              ? Center(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 50,
+                                      ),
+                                      SizedBox(
+                                          height: 300,
+                                          child: Image.asset(
+                                              "assets/images/worker.png")),
+                                      const Text(
+                                        "Stack is Finished",
+                                        style: TextStyle(fontSize: 24),
+                                      ),
+                                    ],
+                                  ),
                                 )
                               : Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 25),
