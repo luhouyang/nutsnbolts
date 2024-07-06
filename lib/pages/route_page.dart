@@ -1,14 +1,22 @@
+// Flutter imports
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Third-party package imports
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+
+// Local project imports - Pages
+import 'package:flutter/services.dart';
 import 'package:nutsnbolts/pages/add_case_page.dart';
 import 'package:nutsnbolts/pages/home_page.dart';
 import 'package:nutsnbolts/pages/payment_page.dart';
 import 'package:nutsnbolts/pages/profile_page.dart';
 import 'package:nutsnbolts/pages/technician_page.dart';
+
+// Local project imports - Use cases and utilities
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
-import 'package:provider/provider.dart';
 
 class RoutePage extends StatefulWidget {
   const RoutePage({super.key});
@@ -20,12 +28,7 @@ class RoutePage extends StatefulWidget {
 class _RoutePageState extends State<RoutePage> {
   final user = FirebaseAuth.instance.currentUser;
 
-  static List<IconData> iconList = const [
-    Icons.home_outlined,
-    Icons.handyman_rounded,
-    Icons.attach_money_rounded,
-    Icons.person
-  ];
+  static List<IconData> iconList = const [Icons.home_outlined, Icons.handyman_rounded, Icons.attach_money_rounded, Icons.person];
 
   int _bottomNavIndex = 0;
 
@@ -44,6 +47,10 @@ class _RoutePageState extends State<RoutePage> {
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
     userUsecase.getUser(user!.uid);
     super.initState();
@@ -72,8 +79,7 @@ class _RoutePageState extends State<RoutePage> {
                   backgroundColor: MyColours.primaryColour,
                   child: const Icon(Icons.add),
                 ),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
                 bottomNavigationBar: AnimatedBottomNavigationBar.builder(
                   itemCount: iconList.length,
                   tabBuilder: (int index, bool isActive) {

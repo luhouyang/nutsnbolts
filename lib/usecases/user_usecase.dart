@@ -1,5 +1,10 @@
+// Third-party package imports
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+// Flutter imports
 import 'package:flutter/widgets.dart';
+
+// Local project imports - Entities and model
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/entities/user_entity.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
@@ -22,7 +27,7 @@ class UserUsecase extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setUser(String specialty) async {
+  Future<void> signupTechnician(String specialty) async {
     userEntity.isTechnician = true;
     userEntity.specialty = specialty;
     await FirestoreModel().signUpTechnician(userEntity);

@@ -1,19 +1,25 @@
+// Dart imports
 import 'dart:async';
 
+// Flutter imports
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Third-party package imports
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:location/location.dart';
+
+// Local project imports - Entities, services, use cases, utils, widgets
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/services/location_service.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 import 'package:nutsnbolts/widgets/case_card.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -205,6 +211,7 @@ class _HomePageState extends State<HomePage> {
                           itemBuilder: (context, index) {
                             CaseEntity caseEntity = CaseEntity.from(
                                 snapshot.data!.docs[index].data());
+
                             return CaseCard(caseEntity: caseEntity);
                           },
                         ),
@@ -234,8 +241,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           TileLayer(
               retinaMode: true,
-              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              subdomains: ['a', 'b', 'c']),
+              urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
           // live location, orientation tracker
           currerntLocationandOrientation()
         ],

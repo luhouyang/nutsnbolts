@@ -1,5 +1,10 @@
+// Third-party package imports
 import 'package:dropdown_button2/dropdown_button2.dart';
+
+// Flutter imports
 import 'package:flutter/material.dart';
+
+// Local project imports
 import 'package:nutsnbolts/entities/bid_entity.dart';
 
 class PriceSelection extends StatefulWidget {

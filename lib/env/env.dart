@@ -1,4 +1,4 @@
-// lib/env/env.dart
+// Third-party package imports
 import 'package:envied/envied.dart';
 part 'env.g.dart';
 

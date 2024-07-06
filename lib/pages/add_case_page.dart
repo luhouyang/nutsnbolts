@@ -1,10 +1,18 @@
+// Dart imports
 import 'dart:io';
-import 'package:dart_openai/dart_openai.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+
+// Flutter imports
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Third-party package imports
+import 'package:dart_openai/dart_openai.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
+// Local project imports
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
