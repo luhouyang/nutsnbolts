@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:nutsnbolts/entities/bid_entity.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -42,7 +42,8 @@ class FirestoreModel {
           location: GeoPoint(location.latitude!, location.longitude!),
           isTechnician: false,
           specialty: Specialty.homeRepair.value,
-          rating: 5);
+          rating: 5,
+          numRating: 1);
 
       await addUser(userEntity);
 
@@ -93,6 +94,18 @@ class FirestoreModel {
     caseEntity.imageFile = picFile;
 
     return caseEntity;
+  }
+
+  Future<void> addBid(String price, UserUsecase userUsecase, CaseEntity caseEntity) async {
+    BidEntity bidEntity = BidEntity(
+        technicianId: userUsecase.userEntity.uid,
+        technicianName: userUsecase.userEntity.userName,
+        price: double.parse(price),
+        rating: userUsecase.userEntity.rating);
+    caseEntity.technicianPrice.add(bidEntity.toMap());
+
+    // post at firestore
+    await firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc(caseEntity.caseId).set(caseEntity.toMap());
   }
 
   //

@@ -9,6 +9,7 @@ class UserEntity {
   bool isTechnician;
   String specialty;
   double rating;
+  int numRating;
 
   UserEntity(
       {required this.uid,
@@ -18,7 +19,8 @@ class UserEntity {
       required this.location,
       required this.isTechnician,
       required this.specialty,
-      required this.rating});
+      required this.rating,
+      required this.numRating});
 
   factory UserEntity.fromMap(Map<String, dynamic> map) {
     return UserEntity(
@@ -30,6 +32,7 @@ class UserEntity {
       isTechnician: map["isTechnician"],
       specialty: map["specialty"],
       rating: double.parse(map["rating"].toString()),
+      numRating: map["numRating"],
     );
   }
 
@@ -43,6 +46,7 @@ class UserEntity {
       'isTechnician': isTechnician,
       'specialty': specialty,
       'rating': rating,
+      'numRating': numRating,
     };
   }
 }

@@ -1,8 +1,8 @@
 class BidEntity {
-  String technicianName;
-  String technicianId;
-  double price;
-  double rating;
+  String technicianName; // auto
+  String technicianId; // auto
+  double price; // technician
+  double rating; // auto
 
   BidEntity({required this.technicianId, required this.technicianName, required this.price, required this.rating});
 
