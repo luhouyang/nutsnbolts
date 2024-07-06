@@ -9,7 +9,8 @@ enum CaseEntityAttr {
   caseId("caseId"),
   caseTitle("caseTitle"),
   caseDesc("caseDesc"),
-  clientPrice("clientPrice");
+  clientPrice("clientPrice"),
+  type("type");
 
   final String value;
   const CaseEntityAttr(this.value);
@@ -22,6 +23,7 @@ class CaseEntity {
   String caseDesc; // user
   Timestamp casePosted; // auto
   bool status; // true (open), false (closed/taken)
+  String type;
   String imageLink;
   Uint8List? image;
 
@@ -49,6 +51,7 @@ class CaseEntity {
       required this.caseDesc,
       required this.casePosted,
       required this.status,
+      required this.type,
       required this.clientName,
       required this.clientPhoneNo,
       required this.caseLocation,
@@ -68,6 +71,7 @@ class CaseEntity {
       caseDesc: map["caseDesc"],
       casePosted: map["casePosted"] as Timestamp,
       status: map["status"],
+      type: map["type"],
       imageLink: map["imageLink"],
       clientName: map["clientName"],
       clientPhoneNo: map["clientPhoneNo"],
@@ -89,6 +93,7 @@ class CaseEntity {
       'caseDesc': caseDesc,
       'casePosted': casePosted,
       'status': status,
+      'type': type,
       'imageLink': imageLink,
       'clientName': clientName,
       'clientPhoneNo': clientPhoneNo,

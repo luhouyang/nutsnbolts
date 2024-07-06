@@ -1,13 +1,14 @@
 import 'dart:io';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
+import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/widgets/my_money_field.dart';
-import 'package:nutsnbolts/widgets/my_text_field.dart';
 import 'package:provider/provider.dart';
 
 class AddCasePage extends StatefulWidget {
@@ -20,7 +21,10 @@ class AddCasePage extends StatefulWidget {
 class _AddCasePageState extends State<AddCasePage> {
   TextEditingController caseTitleController = TextEditingController();
   TextEditingController caseDescController = TextEditingController();
-  TextEditingController moneyController = TextEditingController();
+  TextEditingController moneyController = TextEditingController(text: "0.0");
+
+  String? serviceType;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,35 +37,148 @@ class _AddCasePageState extends State<AddCasePage> {
     return Scaffold(
       body: Consumer<UserUsecase>(
         builder: (context, userUsecase, child) {
-          return Column(
-            children: [
-              const SizedBox(
-                height: 30,
-              ),
-              MyTextField(hint: "case title", validator: textVerify, controller: caseTitleController),
-              MyTextField(hint: "case description", validator: textVerify, controller: caseDescController),
-              MyMoneyTextField(controller: moneyController),
-              imagePickerWidget(), // ui is at line 103-207
-              ElevatedButton(
-                  onPressed: () async {
-                    if (picBytes != null) {
-                      await FirestoreModel().addCase(controllers, userUsecase, picBytes!, picFile!.path).then(
-                        (value) {
-                          Navigator.of(context).pop();
+          return Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 80),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please enter value';
+                          }
+                          return null;
                         },
-                      );
-                    }
-                  },
-                  child: const Text("submit"))
-            ],
+                        controller: caseTitleController,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black),
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            focusColor: Colors.amber[100],
+                            hintText: "case title",
+                            hintStyle: const TextStyle(color: Colors.black)),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please enter value';
+                          }
+                          return null;
+                        },
+                        controller: caseDescController,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black),
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            focusColor: Colors.amber[100],
+                            hintText: "case description",
+                            hintStyle: const TextStyle(color: Colors.black)),
+                      ),
+                    ),
+                  ),
+                  MyMoneyTextField(controller: moneyController),
+                  imagePickerWidget(), // ui is at line 103-207
+                  DropdownButtonFormField2<String>(
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      // Add Horizontal padding using menuItemStyleData.padding so it matches
+                      // the menu padding when button's width is not specified.
+                      contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      // Add more decoration..
+                    ),
+                    hint: const Text(
+                      'Service Category',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    items: Specialty.values
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item.value,
+                              child: Text(
+                                item.value,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select category';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      //Do something when selected item is changed.
+                    },
+                    onSaved: (value) {
+                      serviceType = value.toString();
+                    },
+                    buttonStyleData: const ButtonStyleData(
+                      padding: EdgeInsets.only(right: 8),
+                    ),
+                    iconStyleData: const IconStyleData(
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.black45,
+                      ),
+                      iconSize: 24,
+                    ),
+                    dropdownStyleData: DropdownStyleData(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    menuItemStyleData: const MenuItemStyleData(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                        }
+                        if (picBytes != null) {
+                          await FirestoreModel().addCase(controllers, userUsecase, picBytes!, picFile!.path).then(
+                            (value) {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        }
+                      },
+                      child: const Text("submit"))
+                ],
+              ),
+            ),
           );
         },
       ),
     );
-  }
-
-  String textVerify(value) {
-    return value != null ? "" : "Please enter a valid input";
   }
 
   // image picking and cropping
