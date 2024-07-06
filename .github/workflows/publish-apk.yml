@@ -5,7 +5,8 @@ name: Flutter CI
 on:
   push:
     branches:
-    - main
+    # - main
+    - paused
     
 # on: push    # Default will running for every branch.
     
@@ -30,6 +31,7 @@ jobs:
     
     # Get flutter dependencies.
     - run: flutter pub get
+    - run: dart run build_runner build
     
     # Statically analyze the Dart code for any errors.
     # - run: flutter analyze .
