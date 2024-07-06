@@ -14,7 +14,8 @@ class PriceSelection extends StatefulWidget {
   final List<dynamic> technicianPrice;
   final CaseEntity caseEntity;
 
-  const PriceSelection({super.key, required this.technicianPrice, required this.caseEntity});
+  const PriceSelection(
+      {super.key, required this.technicianPrice, required this.caseEntity});
 
   @override
   State<PriceSelection> createState() => _PriceSelectionState();
@@ -53,7 +54,8 @@ class _PriceSelectionState extends State<PriceSelection> {
               ),
               items: widget.technicianPrice
                   .map((item) => DropdownMenuItem<String>(
-                      value: BidEntity.fromMap(item as Map<String, dynamic>).technicianId,
+                      value: BidEntity.fromMap(item as Map<String, dynamic>)
+                          .technicianId,
                       child: () {
                         BidEntity bidEntity = BidEntity.fromMap(item);
 
@@ -102,13 +104,17 @@ class _PriceSelectionState extends State<PriceSelection> {
                         padding: const EdgeInsets.all(10),
                         backgroundColor: MyColours.primaryColour,
                         foregroundColor: MyColours.secondaryColour,
-                        shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                        shape: ContinuousRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                       }
-                      List<BidEntity> l = bidList.where((bid) => bid.technicianId == winningBid).toList();
-                      await FirestoreModel().confirmTechnician(l[0], widget.caseEntity);
+                      List<BidEntity> l = bidList
+                          .where((bid) => bid.technicianId == winningBid)
+                          .toList();
+                      await FirestoreModel()
+                          .confirmTechnician(l[0], widget.caseEntity);
                     },
                     child: const Text("Confirm")))
           ],
