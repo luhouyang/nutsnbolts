@@ -6,23 +6,32 @@ import 'package:flutter/material.dart';
 
 // Local project imports
 import 'package:nutsnbolts/entities/bid_entity.dart';
+import 'package:nutsnbolts/entities/case_entity.dart';
+import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 
 class PriceSelection extends StatefulWidget {
   final List<dynamic> technicianPrice;
+  final CaseEntity caseEntity;
 
-  const PriceSelection({super.key, required this.technicianPrice});
+  const PriceSelection({super.key, required this.technicianPrice, required this.caseEntity});
 
   @override
   State<PriceSelection> createState() => _PriceSelectionState();
 }
 
 class _PriceSelectionState extends State<PriceSelection> {
-  String? serviceType;
+  String? winningBid;
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    List<BidEntity> bidList = [];
+    for (var bid in widget.caseEntity.technicianPrice) {
+      BidEntity bidEntity = BidEntity.fromMap(bid);
+      bidList.add(bidEntity);
+    }
+
     return Form(
       key: _formKey,
       child: Padding(
@@ -30,7 +39,7 @@ class _PriceSelectionState extends State<PriceSelection> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            DropdownButtonFormField2<BidEntity>(
+            DropdownButtonFormField2<String>(
               isExpanded: true,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -43,8 +52,8 @@ class _PriceSelectionState extends State<PriceSelection> {
                 style: TextStyle(fontSize: 14),
               ),
               items: widget.technicianPrice
-                  .map((item) => DropdownMenuItem<BidEntity>(
-                      value: BidEntity.fromMap(item as Map<String, dynamic>),
+                  .map((item) => DropdownMenuItem<String>(
+                      value: BidEntity.fromMap(item as Map<String, dynamic>).technicianId,
                       child: () {
                         BidEntity bidEntity = BidEntity.fromMap(item);
 
@@ -65,7 +74,7 @@ class _PriceSelectionState extends State<PriceSelection> {
               },
               onChanged: (value) {},
               onSaved: (value) {
-                serviceType = value.toString();
+                winningBid = value;
               },
               buttonStyleData: const ButtonStyleData(
                 padding: EdgeInsets.only(right: 8),
@@ -98,6 +107,8 @@ class _PriceSelectionState extends State<PriceSelection> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                       }
+                      List<BidEntity> l = bidList.where((bid) => bid.technicianId == winningBid).toList();
+                      await FirestoreModel().confirmTechnician(l[0], widget.caseEntity);
                     },
                     child: const Text("confrim")))
           ],

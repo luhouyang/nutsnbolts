@@ -52,7 +52,7 @@ class FirestoreModel {
           uid: uid,
           userName: user!.displayName!,
           email: user.email!,
-          phoneNo: user.phoneNumber!,
+          phoneNo: "",
           location: GeoPoint(location.latitude!, location.longitude!),
           isTechnician: false,
           specialty: Specialty.homeRepair.value,
