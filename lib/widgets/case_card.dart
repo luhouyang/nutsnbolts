@@ -7,6 +7,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 // Local project imports
 import 'package:nutsnbolts/entities/case_entity.dart';
+import 'package:nutsnbolts/model/firestore_model.dart';
+import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 import 'package:nutsnbolts/widgets/price_selection.dart';
 
@@ -25,8 +27,9 @@ class CaseCard extends StatelessWidget {
           children: [
             SlidableAction(
               borderRadius: BorderRadius.circular(20),
-              onPressed: (context) {
+              onPressed: (context) async {
                 // Handle delete action
+                await FirestoreModel().deleteCase(caseEntity);
               },
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
@@ -37,7 +40,11 @@ class CaseCard extends StatelessWidget {
         ),
         child: InkWell(
           onHover: (val) {},
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ChatPage(caseEntity: caseEntity),
+            ));
+          },
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
