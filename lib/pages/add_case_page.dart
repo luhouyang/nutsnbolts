@@ -4,6 +4,8 @@ import 'dart:io';
 // Flutter imports
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:nutsnbolts/services/location_service.dart';
 import 'package:provider/provider.dart';
 
 // Third-party package imports
@@ -30,6 +32,8 @@ class AddCasePage extends StatefulWidget {
 class _AddCasePageState extends State<AddCasePage> {
   TextEditingController caseTitleController = TextEditingController();
   TextEditingController caseDescController = TextEditingController();
+
+  LatLng? location;
 
   String? serviceType;
   final _formKey = GlobalKey<FormState>();
@@ -208,6 +212,29 @@ class _AddCasePageState extends State<AddCasePage> {
                         ),
                         imagePickerWidget(),
                         SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.all(10),
+                                    backgroundColor: MyColours.primaryColour,
+                                    foregroundColor: MyColours.secondaryColour,
+                                    shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                                onPressed: () async {
+                                  location = await Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const LocationPicker(),
+                                  ));
+                                  setState(() {});
+                                },
+                                child: location == null
+                                    ? const Text(
+                                        "Pick Location",
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                      )
+                                    : Text(
+                                        "Lat: ${location!.latitude} Long: ${location!.longitude}",
+                                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                      ))),
+                        SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -221,9 +248,9 @@ class _AddCasePageState extends State<AddCasePage> {
                                   _formKey.currentState!.save();
                                 }
                                 // check for image
-                                if (picBytes != null) {
+                                if (picBytes != null && location != null) {
                                   // post image/case
-                                  await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
+                                  await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!, location!).then(
                                     (CaseEntity caseEntity) {
                                       // pass CaseEntity to ChatPage for OpenAI API call
                                       Navigator.of(context).pushReplacement(MaterialPageRoute(

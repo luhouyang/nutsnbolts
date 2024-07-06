@@ -1,6 +1,7 @@
 // Dart imports
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:latlong2/latlong.dart';
 import 'package:path/path.dart' as p;
 
 // Flutter imports
@@ -69,9 +70,7 @@ class FirestoreModel {
   //
   // case
   //
-  Future<CaseEntity> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase, File picFile, Uint8List picBytes) async {
-    LocationData location = await LocationService().getLiveLocation();
-
+  Future<CaseEntity> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase, File picFile, Uint8List picBytes, LatLng location) async {
     String docId = firebaseFirestore.collection('cases').doc().id;
 
     String imagePath = "$docId${p.extension(picFile.path)}";
@@ -90,7 +89,7 @@ class FirestoreModel {
         clientId: userUsecase.userEntity.uid,
         clientName: userUsecase.userEntity.userName,
         clientPhoneNo: userUsecase.userEntity.phoneNo,
-        caseLocation: GeoPoint(location.latitude!, location.longitude!),
+        caseLocation: GeoPoint(location.latitude, location.longitude),
         technicianId: '',
         technicianName: '',
         technicianPhoneNo: '',
