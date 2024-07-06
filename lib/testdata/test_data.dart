@@ -11,6 +11,7 @@ class TestData {
       status: 0,
       type: Specialty.homeRepair.value,
       imageLink: '',
+      publicImageLink: '',
       clientName: 'clientName',
       clientPhoneNo: 'clientPhoneNo',
       caseLocation: const GeoPoint(81.44, 87.65),

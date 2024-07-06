@@ -17,7 +17,7 @@ class _ChatPageState extends State<ChatPage> {
       body: Column(
         children: [
           Text(widget.caseEntity.toMap().toString()),
-          Image.file(widget.caseEntity.imageFile!)
+          Image.network(widget.caseEntity.publicImageLink)
         ],
       ),
     );

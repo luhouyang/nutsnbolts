@@ -6,16 +6,17 @@ import 'package:flutter/material.dart';
 class StorargeModel {
   static Reference storageRef = FirebaseStorage.instance.ref();
 
-  Future<void> postImage(String fileName, String docRef, File file) async {
-    final folderRef =
-        storageRef.child(docRef); // use other filed as duplicates might exist
+  Future postImage(String fileName, String docRef, File file) async {
+    final folderRef = storageRef.child(docRef); // use other filed as duplicates might exist
     final imageRef = folderRef.child(fileName);
 
     try {
-      await imageRef.putFile(file);
+      TaskSnapshot taskSnapshot = await imageRef.putFile(file);
+      return taskSnapshot.ref.getDownloadURL();
     } on FirebaseException catch (e) {
       debugPrint("Error: $e");
     }
+    return null;
   }
 
   Future<Uint8List?> retrieveImage(String fileName, String docRef) async {

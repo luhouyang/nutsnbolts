@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -68,6 +69,7 @@ class FirestoreModel {
         status: 0,
         type: Specialty.homeRepair.value,
         imageLink: imagePath,
+        publicImageLink: '',
         clientName: userUsecase.userEntity.userName,
         clientPhoneNo: userUsecase.userEntity.phoneNo,
         caseLocation: GeoPoint(location.latitude!, location.longitude!),
@@ -79,13 +81,13 @@ class FirestoreModel {
         appointment: Timestamp.fromDate(DateTime.now()),
         caseResolvedTime: Timestamp.fromDate(DateTime.now()));
 
+    // post image at storage
+    String link = await StorargeModel().postImage(imagePath, userUsecase.userEntity.uid, picFile);
+
+    caseEntity.publicImageLink = link;
+
     // post at firestore
-    await firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc(docId).set(caseEntity.toMap()).then(
-      (value) async {
-        // post image at storage
-        await StorargeModel().postImage(imagePath, userUsecase.userEntity.uid, picFile);
-      },
-    );
+    await firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc(docId).set(caseEntity.toMap());
 
     caseEntity.image = picBytes;
     caseEntity.imageFile = picFile;
@@ -96,7 +98,5 @@ class FirestoreModel {
   //
   // chat
   //
-  Future<void> updateChat() async {
-
-  }
+  Future<void> updateChat() async {}
 }

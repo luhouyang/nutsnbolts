@@ -159,36 +159,36 @@ class _AddCasePageState extends State<AddCasePage> {
                   // Submit button is here!
                   ElevatedButton(
                       onPressed: () async {
-                        // // validation
-                        // if (_formKey.currentState!.validate()) {
-                        //   _formKey.currentState!.save();
-                        // }
-                        // // check for image
-                        // if (picBytes != null) {
-                        //   // post image/case
-                        //   await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
-                        //     (CaseEntity caseEntity) {
-                        //       // pass CaseEntity to ChatPage for OpenAI API call
-                        //       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        //         builder: (context) => ChatPage(caseEntity: caseEntity),
-                        //       ));
-                        //     },
-                        //   );
-                        // }
-                        // makeApiCall() function is at the bottom of the file
-                        // please check if this implmementation is correct
-                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                          makeApiCall().then((response) {
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Case added successfully"),
-                              ),
-                            );
-                          }).catchError((error) {
-                            // Handle any errors here
-                          });
+                        // validation
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
                         }
+                        // check for image
+                        if (picBytes != null) {
+                          // post image/case
+                          await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
+                            (CaseEntity caseEntity) {
+                              // pass CaseEntity to ChatPage for OpenAI API call
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                builder: (context) => ChatPage(caseEntity: caseEntity),
+                              ));
+                            },
+                          );
+                        }
+                        // // makeApiCall() function is at the bottom of the file
+                        // // please check if this implmementation is correct
+                        // if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        //   makeApiCall().then((response) {
+                        //     Navigator.of(context).pop();
+                        //     ScaffoldMessenger.of(context).showSnackBar(
+                        //       const SnackBar(
+                        //         content: Text("Case added successfully"),
+                        //       ),
+                        //     );
+                        //   }).catchError((error) {
+                        //     // Handle any errors here
+                        //   });
+                        // }
                       },
                       child: const Text("submit"))
                 ],

@@ -25,6 +25,7 @@ class CaseEntity {
   int status; // 0 (open), 1 (taken), 2 (complete)
   String type;
   String imageLink;
+  String publicImageLink;
   Uint8List? image;
   File? imageFile;
 
@@ -64,7 +65,8 @@ class CaseEntity {
       required this.technicianPrice,
       required this.appointment,
       required this.caseResolvedTime,
-      required this.imageLink});
+      required this.imageLink,
+      required this.publicImageLink});
 
   factory CaseEntity.from(Map<String, dynamic> map) {
     return CaseEntity(
@@ -75,6 +77,7 @@ class CaseEntity {
       status: map["status"],
       type: map["type"],
       imageLink: map["imageLink"],
+      publicImageLink: map["publicImageLink"],
       clientName: map["clientName"],
       clientPhoneNo: map["clientPhoneNo"],
       caseLocation: map["caseLocation"] as GeoPoint,
@@ -97,6 +100,7 @@ class CaseEntity {
       'status': status,
       'type': type,
       'imageLink': imageLink,
+      'publicImageLink': publicImageLink,
       'clientName': clientName,
       'clientPhoneNo': clientPhoneNo,
       'caseLocation': caseLocation,
