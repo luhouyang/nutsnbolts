@@ -27,8 +27,10 @@ class _TechnicianPageState extends State<TechnicianPage> {
   final List<SwipeItem> _swipeItems = <SwipeItem>[];
   MatchEngine? _matchEngine;
 
-  final ValueNotifier<Color> _crossButtonColor = ValueNotifier<Color>(Colors.grey[300]!);
-  final ValueNotifier<Color> _checkButtonColor = ValueNotifier<Color>(Colors.grey[300]!);
+  final ValueNotifier<Color> _crossButtonColor =
+      ValueNotifier<Color>(Colors.grey[300]!);
+  final ValueNotifier<Color> _checkButtonColor =
+      ValueNotifier<Color>(Colors.grey[300]!);
   bool _isStackFinished = false;
 
   @override
@@ -65,10 +67,12 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                   padding: const EdgeInsets.all(10),
                                   backgroundColor: MyColours.primaryColour,
                                   foregroundColor: MyColours.secondaryColour,
-                                  shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                                  shape: ContinuousRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const BecomeTechnicianPage(),
+                                  builder: (context) =>
+                                      const BecomeTechnicianPage(),
                                 ));
                               },
                               child: const Text("Become A Technician")),
@@ -94,22 +98,32 @@ class _TechnicianPageState extends State<TechnicianPage> {
                         ),
                         child: Text(
                           "Find A Job",
-                          style: TextStyle(color: MyColours.secondaryColour, fontSize: 24, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: MyColours.secondaryColour,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                       const SizedBox(
                         height: 25,
                       ),
                       StreamBuilder(
-                        stream: FirebaseFirestore.instance.collection('cases').orderBy('casePosted', descending: true).snapshots(),
+                        stream: FirebaseFirestore.instance
+                            .collection('cases')
+                            .orderBy('casePosted', descending: true)
+                            .snapshots(),
                         builder: (context, snapshot) {
-                          if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                          if (!snapshot.hasData ||
+                              snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                             return Column(
                               children: [
                                 SizedBox(
-                                  height: MediaQuery.of(context).size.height / 3,
+                                  height:
+                                      MediaQuery.of(context).size.height / 3,
                                 ),
-                                const Center(child: CircularProgressIndicator()),
+                                const Center(
+                                    child: CircularProgressIndicator()),
                               ],
                             );
                           }
@@ -128,7 +142,9 @@ class _TechnicianPageState extends State<TechnicianPage> {
                               bidList.add(bidEntity);
                             }
 
-                            if (!bidList.any((bid) => bid.technicianId == userUsecase.userEntity.uid)) {
+                            if (!bidList.any((bid) =>
+                                bid.technicianId ==
+                                userUsecase.userEntity.uid)) {
                               _swipeItems.add(SwipeItem(
                                 content: caseEntity,
                                 likeAction: () {
@@ -139,25 +155,36 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        backgroundColor: Colors.amber,
-                                        content: MyMoneyTextField(controller: moneyController),
+                                        title: const Text(
+                                            "Amount that you want to charge"),
+                                        backgroundColor: Colors.white,
+                                        content: MyMoneyTextField(
+                                            controller: moneyController),
                                         actions: <Widget>[
                                           TextButton(
                                             child: const Text(
                                               'Cancel',
-                                              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                           ),
                                           TextButton(
-                                            child: const Text(
+                                            child: Text(
                                               'Confirm',
-                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                              style: TextStyle(
+                                                  color:
+                                                      MyColours.primaryColour,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             onPressed: () async {
-                                              await FirestoreModel().addBid(moneyController.text, userUsecase, caseEntity).then(
+                                              await FirestoreModel()
+                                                  .addBid(moneyController.text,
+                                                      userUsecase, caseEntity)
+                                                  .then(
                                                 (value) {
                                                   Navigator.of(context).pop();
                                                 },
@@ -169,13 +196,15 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                     },
                                   );
 
-                                  Future.delayed(const Duration(milliseconds: 500), () {
+                                  Future.delayed(
+                                      const Duration(milliseconds: 500), () {
                                     _checkButtonColor.value = Colors.grey[300]!;
                                   });
                                 },
                                 nopeAction: () {
                                   _crossButtonColor.value = Colors.red;
-                                  Future.delayed(const Duration(milliseconds: 500), () {
+                                  Future.delayed(
+                                      const Duration(milliseconds: 500), () {
                                     _crossButtonColor.value = Colors.grey[300]!;
                                   });
                                 },
@@ -190,20 +219,29 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                   child: Text("Stack is Finished"),
                                 )
                               : Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25),
                                   child: Stack(children: [
                                     SwipeCards(
                                       matchEngine: _matchEngine!,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        CaseEntity caseEntity = _swipeItems[index].content as CaseEntity;
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        CaseEntity caseEntity =
+                                            _swipeItems[index].content
+                                                as CaseEntity;
                                         return Stack(
                                           children: [
                                             Container(
-                                              height: (MediaQuery.of(context).size.height / 3) * 1.8,
+                                              height: (MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      3) *
+                                                  1.8,
                                               alignment: Alignment.center,
                                               decoration: BoxDecoration(
                                                 color: Colors.grey[200],
-                                                borderRadius: BorderRadius.circular(20),
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
                                                 image: DecorationImage(
                                                   image: NetworkImage(
                                                     caseEntity.publicImageLink,
@@ -215,43 +253,74 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                             Align(
                                               alignment: Alignment.bottomCenter,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Container(
-                                                  padding: const EdgeInsets.all(15),
-                                                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                                                  padding:
+                                                      const EdgeInsets.all(15),
+                                                  margin: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10),
                                                   decoration: BoxDecoration(
-                                                    color: Colors.white.withOpacity(0.9),
-                                                    borderRadius: BorderRadius.circular(20),
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
                                                   ),
                                                   child: SizedBox(
                                                     width: double.infinity,
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
                                                       children: [
                                                         Text(
                                                           caseEntity.caseTitle,
-                                                          style: const TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 22,
-                                                            fontWeight: FontWeight.bold,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           ),
                                                         ),
                                                         Text(
                                                           caseEntity.caseDesc,
-                                                          style: const TextStyle(fontSize: 16),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 16),
                                                         ),
                                                         const Divider(),
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
                                                           children: [
                                                             Text(
-                                                              caseEntity.clientName,
-                                                              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                                                              caseEntity
+                                                                  .clientName,
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      600]),
                                                             ),
                                                             Text(
-                                                              DateFormat('dd/MM/yyyy hh:mm a').format(caseEntity.casePosted.toDate()),
-                                                              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                                                              DateFormat(
+                                                                      'dd/MM/yyyy hh:mm a')
+                                                                  .format(caseEntity
+                                                                      .casePosted
+                                                                      .toDate()),
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      600]),
                                                             ),
                                                           ],
                                                         ),
@@ -270,7 +339,8 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                         });
                                       },
                                       itemChanged: (SwipeItem item, int index) {
-                                        debugPrint("item: ${(item.content as CaseEntity).caseTitle}, index: $index");
+                                        debugPrint(
+                                            "item: ${(item.content as CaseEntity).caseTitle}, index: $index");
                                       },
                                       leftSwipeAllowed: true,
                                       rightSwipeAllowed: true,
@@ -316,7 +386,8 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {},
-                                  icon: const Icon(Icons.check, size: 40, color: Colors.white),
+                                  icon: const Icon(Icons.check,
+                                      size: 40, color: Colors.white),
                                 ),
                               );
                             },

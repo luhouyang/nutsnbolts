@@ -20,12 +20,14 @@ class _MyMoneyTextFieldState extends State<MyMoneyTextField> {
         setState(() {});
       },
       decoration: InputDecoration(
-        labelText: "Amount RM ${(double.tryParse(widget.controller.text) ?? 0.0)}",
+        labelText:
+            "Amount RM ${(double.tryParse(widget.controller.text) ?? 0.0)}",
         prefix: const Text("RM "),
         filled: true,
         fillColor: Colors.white,
         border: const UnderlineInputBorder(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           borderSide: BorderSide(
             color: Colors.blue,
           ),
@@ -46,7 +48,8 @@ class MoneyFormatter extends TextInputFormatter {
     required this.separator,
   });
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     newValue = TextEditingValue(
       text: int.tryParse(newValue.text.replaceAll(".", "")).toString(),
       selection: TextSelection.collapsed(
@@ -56,7 +59,8 @@ class MoneyFormatter extends TextInputFormatter {
     debugPrint(newValue.text);
     if (newValue.text.length > 2) {
       return TextEditingValue(
-        text: '${newValue.text.substring(0, newValue.text.length - 2)}$separator${newValue.text.substring(newValue.text.length - 2)}',
+        text:
+            '${newValue.text.substring(0, newValue.text.length - 2)}$separator${newValue.text.substring(newValue.text.length - 2)}',
         selection: TextSelection.collapsed(
           offset: newValue.selection.end + 1,
         ),

@@ -25,6 +25,11 @@ class _PriceSelectionState extends State<PriceSelection> {
   String? winningBid;
   final _formKey = GlobalKey<FormState>();
 
+  // Function to truncate strings
+  String truncateString(String text, int length) {
+    return text.length > length ? '${text.substring(0, length)}...' : text;
+  }
+
   @override
   Widget build(BuildContext context) {
     List<BidEntity> bidList = [];
@@ -35,8 +40,8 @@ class _PriceSelectionState extends State<PriceSelection> {
 
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: SizedBox(
+        width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -52,22 +57,23 @@ class _PriceSelectionState extends State<PriceSelection> {
                 'Choose Technician',
                 style: TextStyle(fontSize: 14),
               ),
-              items: widget.technicianPrice
-                  .map((item) => DropdownMenuItem<String>(
-                      value: BidEntity.fromMap(item as Map<String, dynamic>)
-                          .technicianId,
-                      child: () {
-                        BidEntity bidEntity = BidEntity.fromMap(item);
-
-                        return Row(
-                          children: [
-                            Text("RM ${bidEntity.price.toString()}"),
-                            Text(" | ${bidEntity.technicianName} | "),
-                            Text("R: ${bidEntity.rating.toString()}"),
-                          ],
-                        );
-                      }()))
-                  .toList(),
+              items: widget.technicianPrice.map((item) {
+                BidEntity bidEntity =
+                    BidEntity.fromMap(item as Map<String, dynamic>);
+                return DropdownMenuItem<String>(
+                  value: bidEntity.technicianId,
+                  child: Row(
+                    children: [
+                      Text(
+                          "RM ${truncateString(bidEntity.price.toString(), 5)}"),
+                      Text(
+                          " | ${truncateString(bidEntity.technicianName, 15)} | "),
+                      Text(
+                          "R: ${truncateString(bidEntity.rating.toString(), 4)}"),
+                    ],
+                  ),
+                );
+              }).toList(),
               validator: (value) {
                 if (value == null) {
                   return 'Please select technician';
@@ -98,25 +104,28 @@ class _PriceSelectionState extends State<PriceSelection> {
               ),
             ),
             SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(10),
-                        backgroundColor: MyColours.primaryColour,
-                        foregroundColor: MyColours.secondaryColour,
-                        shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                      }
-                      List<BidEntity> l = bidList
-                          .where((bid) => bid.technicianId == winningBid)
-                          .toList();
-                      await FirestoreModel()
-                          .confirmTechnician(l[0], widget.caseEntity);
-                    },
-                    child: const Text("Confirm")))
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(10),
+                  backgroundColor: MyColours.primaryColour,
+                  foregroundColor: MyColours.secondaryColour,
+                  shape: ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                ),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                  }
+                  List<BidEntity> l = bidList
+                      .where((bid) => bid.technicianId == winningBid)
+                      .toList();
+                  await FirestoreModel()
+                      .confirmTechnician(l[0], widget.caseEntity);
+                },
+                child: const Text("Confirm"),
+              ),
+            ),
           ],
         ),
       ),
