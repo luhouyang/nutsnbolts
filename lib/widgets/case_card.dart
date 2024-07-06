@@ -27,6 +27,14 @@ class CaseCard extends StatelessWidget {
           children: [
             SlidableAction(
               borderRadius: BorderRadius.circular(20),
+              onPressed: (context) async {},
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              icon: Icons.check_rounded,
+              label: 'Done',
+            ),
+            SlidableAction(
+              borderRadius: BorderRadius.circular(20),
               onPressed: (context) async {
                 // Handle delete action
                 await FirestoreModel().deleteCase(caseEntity);

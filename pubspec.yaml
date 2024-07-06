@@ -55,6 +55,7 @@ flutter:
   assets:
     - assets/nnb.jpeg
     - assets/images/logo.png
+    - assets/images/worker.png
 
   fonts:
     - family: Poppins
