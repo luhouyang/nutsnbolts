@@ -1,16 +1,21 @@
-# nutsnbolts
+# Nuts&Bolts
 
-A new Flutter project.
+The hacked together project for the E3S2 Hackathon 2024, brought to you by team HereForTheShirt. Nuts&Bolts is a technician service hiring app that allows you to call a technician that fixes any maintenance or technical issue in your home.
 
-## Getting Started
+## Installing the App
 
-This project is a starting point for a Flutter application.
+The apk to download the app are available in the 'Releases' section.
 
-A few resources to get you started if this is your first Flutter project:
+## For Developers
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. Clone the git repository
+2. Change your working directory to the project with `cd nutsnbolts`
+3. Run it with a connected device by running `flutter run`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Encountering issues? Try take a look at the [Flutter Docs](https://docs.flutter.dev/get-started/test-drive)
+
+# Collaborators
+
+<a href="#readme">
+    <img alt="logo" width="30%" src="https://contributors-img.firebaseapp.com/image?repo=maguswyvern/nutsnbolts">
+</a>
