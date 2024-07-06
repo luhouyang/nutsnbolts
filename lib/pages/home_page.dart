@@ -93,11 +93,18 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               "nuts&bolts.",
-                              style: TextStyle(fontFamily: "Poppins", color: MyColours.secondaryColour, fontSize: 28, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: MyColours.secondaryColour,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "Welcome, ${user!.displayName}!",
-                              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 18, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
@@ -134,11 +141,13 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           const Text(
                             "Want something fixed?",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           Text(
                             "Get a technician now!",
-                            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.grey[700]),
                           ),
                         ],
                       ),
@@ -153,7 +162,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     const Text(
                       "Jobs Near You",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     const SizedBox(
                       height: 10,
@@ -173,58 +183,63 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor:
+                            !_work ? MyColours.primaryColour : Colors.grey,
+                        elevation: !_work ? 8 : 0,
                       ),
-                      backgroundColor: !_work ? Colors.black : Colors.grey,
-                      elevation: !_work ? 8 : 0,
-                    ),
-                    onPressed: () {
-                      if (_work) {
-                        setState(() {
-                          _work = !_work;
-                        });
-                      }
-                    },
-                    child: Text(
-                      "Your Cases",
-                      style: TextStyle(
-                        color: !_work ? Colors.yellow : Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      backgroundColor: !_work ? Colors.grey : Colors.black,
-                      elevation: !_work ? 0 : 8,
-                    ),
-                    onPressed: () {
-                      if (!_work) {
-                        setState(() {
-                          _work = !_work;
-                        });
-                      }
-                    },
-                    child: Text(
-                      "Ongoing Work",
-                      style: TextStyle(
-                        color: !_work ? Colors.white : Colors.yellow,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      onPressed: () {
+                        if (_work) {
+                          setState(() {
+                            _work = !_work;
+                          });
+                        }
+                      },
+                      child: const Text(
+                        "Your Cases",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  )
-                ],
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor:
+                            !_work ? Colors.grey : MyColours.primaryColour,
+                        elevation: !_work ? 0 : 8,
+                      ),
+                      onPressed: () {
+                        if (!_work) {
+                          setState(() {
+                            _work = !_work;
+                          });
+                        }
+                      },
+                      child: const Text(
+                        "Ongoing Job",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
               _work
                   ? userUsecase.userEntity.nuts.isEmpty
@@ -235,22 +250,27 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               "No Ongoing Work",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                           ],
                         )
                       : StreamBuilder(
                           stream: FirebaseFirestore.instance
                               .collection('cases')
-                              .where(FieldPath.documentId, whereIn: userUsecase.userEntity.nuts)
+                              .where(FieldPath.documentId,
+                                  whereIn: userUsecase.userEntity.nuts)
                               .orderBy('casePosted', descending: true)
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                            if (!snapshot.hasData ||
+                                snapshot.connectionState ==
+                                    ConnectionState.waiting) {
                               return Column(
                                 children: [
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height / 5,
+                                    height:
+                                        MediaQuery.of(context).size.height / 5,
                                   ),
                                   CircularProgressIndicator(
                                     color: MyColours.primaryColour,
@@ -260,7 +280,8 @@ class _HomePageState extends State<HomePage> {
                             }
 
                             return Padding(
-                              padding: const EdgeInsets.fromLTRB(25, 10, 25, 15),
+                              padding:
+                                  const EdgeInsets.fromLTRB(25, 10, 25, 15),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -270,7 +291,8 @@ class _HomePageState extends State<HomePage> {
                                   ListView.builder(
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemCount: snapshot.data!.size,
                                     itemBuilder: (context, index) {
                                       CaseEntity caseEntity = CaseEntity.fromMap(snapshot.data!.docs[index].data());
@@ -286,12 +308,15 @@ class _HomePageState extends State<HomePage> {
                   : StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('cases')
-                          .where("clientId", isEqualTo: userUsecase.userEntity.uid)
+                          .where("clientId",
+                              isEqualTo: userUsecase.userEntity.uid)
                           .orderBy('casePosted', descending: true)
                           .limit(10)
                           .snapshots(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                        if (!snapshot.hasData ||
+                            snapshot.connectionState ==
+                                ConnectionState.waiting) {
                           return Column(
                             children: [
                               SizedBox(
@@ -347,7 +372,9 @@ class _HomePageState extends State<HomePage> {
           initialZoom: 18.0,
         ),
         children: [
-          TileLayer(retinaMode: true, urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
+          TileLayer(
+              retinaMode: true,
+              urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
           // live location, orientation tracker
           currerntLocationandOrientation(),
           if (caseList.isNotEmpty)
