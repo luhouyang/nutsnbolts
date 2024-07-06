@@ -6,8 +6,7 @@ import 'package:nutsnbolts/widgets/case_card.dart'; // Import CaseEntity class
 
 void main() {
   group('CaseCard Widget', () {
-    testWidgets('Widget displays correct case details',
-        (WidgetTester tester) async {
+    testWidgets('Widget displays correct case details', (WidgetTester tester) async {
       // Create a CaseEntity instance with sample data
       CaseEntity caseEntity = CaseEntity(
         caseId: '123',
@@ -20,11 +19,11 @@ void main() {
         clientId: '9GLrGlQOQqemy0790Ttqt3UP43M2',
         clientName: 'John Doe',
         clientPhoneNo: '123-456-7890',
-        caseLocation: GeoPoint(1.234, 5.678),
+        caseLocation: const GeoPoint(1.234, 5.678),
         technicianId: 'tech456',
         technicianName: 'Jane Smith',
         technicianPhoneNo: '987-654-3210',
-        technicianLocation: GeoPoint(5.678, 1.234),
+        technicianLocation: const GeoPoint(5.678, 1.234),
         technicianPrice: [80.0, 100.0, 120.0],
         appointment: Timestamp.now(),
         caseResolvedTime: Timestamp.now(),
