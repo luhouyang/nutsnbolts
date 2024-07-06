@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 // Local project imports
 import 'package:nutsnbolts/entities/case_entity.dart';
+import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 import 'package:nutsnbolts/widgets/price_selection.dart';
@@ -26,8 +27,9 @@ class CaseCard extends StatelessWidget {
           children: [
             SlidableAction(
               borderRadius: BorderRadius.circular(20),
-              onPressed: (context) {
+              onPressed: (context) async {
                 // Handle delete action
+                await FirestoreModel().deleteCase(caseEntity);
               },
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
@@ -38,7 +40,11 @@ class CaseCard extends StatelessWidget {
         ),
         child: InkWell(
           onHover: (val) {},
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ChatPage(caseEntity: caseEntity),
+            ));
+          },
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
@@ -51,8 +57,7 @@ class CaseCard extends StatelessWidget {
               children: [
                 Text(
                   caseEntity.caseTitle,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,12 +70,10 @@ class CaseCard extends StatelessWidget {
                   caseEntity.caseDesc,
                   style: TextStyle(color: Colors.grey[700]),
                 ),
-                Text(
-                    "posted on: ${DateFormat.yMEd().add_jms().format(caseEntity.casePosted.toDate())}"),
+                Text("posted on: ${DateFormat.yMEd().add_jms().format(caseEntity.casePosted.toDate())}"),
                 // Text(
                 //     "lat: ${caseEntity.caseLocation.latitude.toString()} long: ${caseEntity.caseLocation.longitude.toString()}")
-                if (caseEntity.technicianPrice.isNotEmpty &&
-                    caseEntity.status == 0)
+                if (caseEntity.technicianPrice.isNotEmpty && caseEntity.status == 0)
                   PriceSelection(
                     technicianPrice: caseEntity.technicianPrice,
                     caseEntity: caseEntity,
@@ -78,8 +81,7 @@ class CaseCard extends StatelessWidget {
                 if (caseEntity.status == 1)
                   Text(
                     "CHAT WITH TECHNICIAN: ${caseEntity.technicianName}",
-                    style: const TextStyle(
-                        color: Colors.amber, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
                   ),
               ],
             ),

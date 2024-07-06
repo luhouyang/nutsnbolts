@@ -12,8 +12,7 @@ class StorargeModel {
   static Reference storageRef = FirebaseStorage.instance.ref();
 
   Future postImage(String fileName, String docRef, File file) async {
-    final folderRef =
-        storageRef.child(docRef); // use other filed as duplicates might exist
+    final folderRef = storageRef.child(docRef); // use other filed as duplicates might exist
     final imageRef = folderRef.child(fileName);
 
     try {
@@ -36,5 +35,16 @@ class StorargeModel {
       debugPrint("Error: $e");
     }
     return null;
+  }
+
+  Future<void> deleteImage(String fileName, String docRef) async {
+    final folderRef = storageRef.child(docRef);
+    final imageRef = folderRef.child(fileName);
+
+    try {
+      await imageRef.delete();
+    } on FirebaseException catch (e) {
+      debugPrint("Error: $e");
+    }
   }
 }

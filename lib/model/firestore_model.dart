@@ -142,14 +142,21 @@ class FirestoreModel {
   }
 
   Future<List<CaseEntity>> getRecommendCases(UserUsecase userUsecase) async {
-    QuerySnapshot snapshot = await firebaseFirestore.collection('cases')
-    // .where('type', isEqualTo: userUsecase.userEntity.specialty)
-    .get();
+    QuerySnapshot snapshot = await firebaseFirestore
+        .collection('cases')
+        // .where('type', isEqualTo: userUsecase.userEntity.specialty)
+        .get();
     List<CaseEntity> caseList = [];
     for (var data in snapshot.docs) {
       caseList.add(CaseEntity.fromMap(data.data() as Map<String, dynamic>));
     }
     return caseList;
+  }
+
+  Future<void> deleteCase(CaseEntity caseEntity) async {
+    await StorargeModel().deleteImage(caseEntity.imageLink, caseEntity.clientId);
+
+    await firebaseFirestore.collection('cases').doc(caseEntity.caseId).delete();
   }
 
   //
