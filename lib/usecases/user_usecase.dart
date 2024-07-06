@@ -21,4 +21,11 @@ class UserUsecase extends ChangeNotifier {
     userEntity = newUserEntity;
     notifyListeners();
   }
+
+  Future<void> setUser(String specialty) async {
+    userEntity.isTechnician = true;
+    userEntity.specialty = specialty;
+    await FirestoreModel().signUpTechnician(userEntity);
+    notifyListeners();
+  }
 }

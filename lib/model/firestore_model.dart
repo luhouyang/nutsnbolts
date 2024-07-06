@@ -51,13 +51,17 @@ class FirestoreModel {
     }
   }
 
+  Future<void> signUpTechnician(UserEntity userEntity) async {
+    await firebaseFirestore.collection('users').doc(userEntity.uid).set(userEntity.toMap());
+  }
+
   //
   // case
   //
   Future<CaseEntity> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase, File picFile, Uint8List picBytes) async {
     LocationData location = await LocationService().getLiveLocation();
 
-    String docId = firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc().id;
+    String docId = firebaseFirestore.collection('cases').doc().id;
 
     String imagePath = "$docId${p.extension(picFile.path)}";
     debugPrint(imagePath);
@@ -69,8 +73,10 @@ class FirestoreModel {
         casePosted: Timestamp.fromDate(DateTime.now()),
         status: 0,
         type: Specialty.homeRepair.value,
+        finalPrice: 0.0,
         imageLink: imagePath,
         publicImageLink: '',
+        clientId: userUsecase.userEntity.uid,
         clientName: userUsecase.userEntity.userName,
         clientPhoneNo: userUsecase.userEntity.phoneNo,
         caseLocation: GeoPoint(location.latitude!, location.longitude!),
@@ -88,7 +94,7 @@ class FirestoreModel {
     caseEntity.publicImageLink = link;
 
     // post at firestore
-    await firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc(docId).set(caseEntity.toMap());
+    await firebaseFirestore.collection('cases').doc(docId).set(caseEntity.toMap());
 
     caseEntity.image = picBytes;
     caseEntity.imageFile = picFile;
@@ -105,7 +111,17 @@ class FirestoreModel {
     caseEntity.technicianPrice.add(bidEntity.toMap());
 
     // post at firestore
-    await firebaseFirestore.collection('users').doc(userUsecase.userEntity.uid).collection('cases').doc(caseEntity.caseId).set(caseEntity.toMap());
+    await firebaseFirestore.collection('cases').doc(caseEntity.caseId).set(caseEntity.toMap());
+  }
+
+  Future<void> confirmTechnician(BidEntity bidEntity, CaseEntity caseEntity) async {
+    caseEntity.technicianId = bidEntity.technicianId;
+    caseEntity.technicianName = bidEntity.technicianName;
+    caseEntity.finalPrice = bidEntity.price;
+    caseEntity.status = 1;
+
+    // post at firestore
+    await firebaseFirestore.collection('cases').doc(caseEntity.caseId).set(caseEntity.toMap());
   }
 
   //

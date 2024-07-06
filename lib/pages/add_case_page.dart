@@ -443,12 +443,12 @@ makeApiCall() async {
   final userMessage = OpenAIChatCompletionChoiceMessageModel(
     content: [
       OpenAIChatCompletionChoiceMessageContentItemModel.text(
-        "Hello, I am a chatbot created by OpenAI. How are you today?", // TODO: Engineer a custom prompt for the image case analysis
+        "Hello, I am a chatbot created by OpenAI. How are you today?",
       ),
 
       //! image url contents are allowed only for models with image support such gpt-4.
       OpenAIChatCompletionChoiceMessageContentItemModel.imageUrl(
-        "https://placehold.co/600x400", // TODO: Send the image that was picked by the user
+        "https://placehold.co/600x400",
       ),
     ],
     role: OpenAIChatMessageRole.user,
@@ -462,7 +462,7 @@ makeApiCall() async {
 
 // the actual request.
   OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
-    model: "gpt-3.5-turbo-1106", // TODO: Change model to GPT-4
+    model: "gpt-3.5-turbo-1106",
     responseFormat: {"type": "json_object"},
     seed: 6,
     messages: requestMessages,
@@ -472,9 +472,8 @@ makeApiCall() async {
 
   // print the response.
 
-  // TODO: Handle the response from the API and put it into a case chat
-  print(chatCompletion.choices.first.message); // ...
-  print(chatCompletion.systemFingerprint); // ...
-  print(chatCompletion.usage.promptTokens); // ...
-  print(chatCompletion.id); // ...
+  debugPrint(chatCompletion.choices.first.message.toString()); // ...
+  debugPrint(chatCompletion.systemFingerprint); // ...
+  debugPrint(chatCompletion.usage.promptTokens.toString()); // ...
+  debugPrint(chatCompletion.id); // ...
 }
