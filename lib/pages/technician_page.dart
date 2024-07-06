@@ -120,7 +120,7 @@ class _TechnicianPageState extends State<TechnicianPage> {
                           var documents = snapshot.data!.docs;
                           for (var doc in documents) {
                             var data = doc.data();
-                            CaseEntity caseEntity = CaseEntity.from(data);
+                            CaseEntity caseEntity = CaseEntity.fromMap(data);
 
                             List<BidEntity> bidList = [];
                             for (var bid in caseEntity.technicianPrice) {

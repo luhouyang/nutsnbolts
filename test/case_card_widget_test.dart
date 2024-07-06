@@ -20,6 +20,7 @@ void main() {
         clientName: 'John Doe',
         clientPhoneNo: '123-456-7890',
         caseLocation: const GeoPoint(1.234, 5.678),
+        photoUrl: " ",
         technicianId: 'tech456',
         technicianName: 'Jane Smith',
         technicianPhoneNo: '987-654-3210',
