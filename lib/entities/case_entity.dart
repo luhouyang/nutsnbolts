@@ -21,7 +21,7 @@ class CaseEntity {
   String caseTitle; // user
   String caseDesc; // user
   Timestamp casePosted; // auto
-  bool status; // true (open), false (closed/taken)
+  int status; // 0 (open), 1 (taken), 2 (complete)
   String type;
   String imageLink;
   Uint8List? image;
@@ -37,7 +37,8 @@ class CaseEntity {
   GeoPoint technicianLocation; // live location of technician when heading to house?
 
   // during negotiation
-  double technicianPrice; // only lowest price gets stored, this price is final price
+  // double technicianPrice; // only lowest price gets stored, this price is final price
+  List<dynamic> technicianPrice;
 
   // after confirm technician
   Timestamp appointment; // user, technician
@@ -99,7 +100,7 @@ class CaseEntity {
       'technicianLocation': technicianLocation,
       'technicianPrice': technicianPrice,
       'appointment': appointment,
-      'caseResolvedTime': caseResolvedTime, 
+      'caseResolvedTime': caseResolvedTime,
     };
   }
 }
