@@ -1,7 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
-import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:provider/provider.dart';
 

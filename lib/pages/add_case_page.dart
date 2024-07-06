@@ -19,7 +19,6 @@ import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
-import 'package:provider/provider.dart';
 
 class AddCasePage extends StatefulWidget {
   const AddCasePage({super.key});
