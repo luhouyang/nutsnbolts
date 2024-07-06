@@ -44,3 +44,4 @@ app.*.map.json
 
 
 /lib/env/env.g.dart
+.env
