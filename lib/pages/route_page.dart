@@ -1,4 +1,5 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nutsnbolts/pages/add_case_page.dart';
 import 'package:nutsnbolts/pages/home_page.dart';
@@ -17,6 +18,8 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
+  final user = FirebaseAuth.instance.currentUser;
+
   static List<IconData> iconList = const [
     Icons.home_outlined,
     Icons.handyman_rounded,
@@ -37,6 +40,13 @@ class _RoutePageState extends State<RoutePage> {
       return const ProfilePage();
     }
     return const HomePage();
+  }
+
+  @override
+  void initState() {
+    UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
+    userUsecase.getUser(user!.uid);
+    super.initState();
   }
 
   @override

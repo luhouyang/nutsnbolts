@@ -100,7 +100,7 @@ class _AddCasePageState extends State<AddCasePage> {
                     ),
                   ),
                   MyMoneyTextField(controller: moneyController),
-                  imagePickerWidget(), // ui is at line 103-207
+                  imagePickerWidget(), // ui is at line 220-326
                   DropdownButtonFormField2<String>(
                     isExpanded: true,
                     decoration: InputDecoration(

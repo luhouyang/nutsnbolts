@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
@@ -16,14 +16,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void initState() {
-    UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
-    userUsecase.getUser('uid');
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Consumer<UserUsecase>(
       builder: (context, userUsecase, child) {
         return SingleChildScrollView(
@@ -57,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "Welcome, ${userUsecase.userEntity.userName}!",
+                              "Welcome, ${user!.displayName}!",
                               style: TextStyle(
                                   color: Colors.white.withOpacity(0.8),
                                   fontSize: 18,
@@ -65,16 +60,21 @@ class _HomePageState extends State<HomePage> {
                             )
                           ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: MyColours.secondaryColour,
-                              borderRadius: BorderRadius.circular(50)),
-                          child: Icon(
-                            Icons.person,
-                            color: MyColours.primaryColour,
+                        // Container(
+                        //   padding: const EdgeInsets.all(10),
+                        //   decoration: BoxDecoration(color: MyColours.secondaryColour, borderRadius: BorderRadius.circular(50)),
+                        //   child: Icon(
+                        //     Icons.person,
+                        //     color: MyColours.primaryColour,
+                        //   ),
+                        // )
+                        SizedBox(
+                          height: 50,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.network(user.photoURL!),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     const SizedBox(

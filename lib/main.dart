@@ -30,7 +30,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
           theme: ThemeData(fontFamily: 'RobotoCondensed'),
           debugShowCheckedModeBanner: false,
-          home: const RoutePage()),
+          home: const AuthGate()),
     );
   }
 }
