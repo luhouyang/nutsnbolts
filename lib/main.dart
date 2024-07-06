@@ -1,11 +1,16 @@
+// Flutter imports
+import 'package:flutter/material.dart';
+
+// Package imports
 import 'package:dart_openai/dart_openai.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Project imports
 import 'package:nutsnbolts/env/env.dart';
 import 'package:nutsnbolts/firebase_options.dart';
-import 'package:nutsnbolts/usecases/user_usecase.dart';
-import 'package:provider/provider.dart';
 import 'package:nutsnbolts/pages/auth_page.dart';
+import 'package:nutsnbolts/usecases/user_usecase.dart';
 
 void main() async {
   // Make sure Flutter is fully initialized then load firebase options
@@ -14,9 +19,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // OPENAI API Stuff Setup
+  // OpenAI API Setup
   OpenAI.apiKey = Env.apiKey;
-  OpenAI.requestsTimeOut = const Duration(seconds: 60); // 60 seconds.
+  OpenAI.requestsTimeOut = const Duration(seconds: 60);
   OpenAI.showLogs = true;
 
   runApp(const MainApp());
@@ -34,8 +39,8 @@ class MainApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-          theme: ThemeData(fontFamily: 'RobotoCondensed'),
-          debugShowCheckedModeBanner: false,
+          theme: ThemeData(fontFamily: 'RobotoCondensed'), // Set default font
+          debugShowCheckedModeBanner: false, // Disable debug banner
           home: const AuthGate()),
     );
   }
