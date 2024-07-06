@@ -34,6 +34,7 @@ class CaseEntity {
   String clientId;
   String clientName; // auto
   String clientPhoneNo; // auto
+  String photoUrl;
   GeoPoint caseLocation; // user
 
   // technician
@@ -62,6 +63,7 @@ class CaseEntity {
       required this.clientName,
       required this.clientPhoneNo,
       required this.caseLocation,
+      required this.photoUrl,
       required this.technicianId,
       required this.technicianName,
       required this.technicianPhoneNo,
@@ -72,7 +74,7 @@ class CaseEntity {
       required this.imageLink,
       required this.publicImageLink});
 
-  factory CaseEntity.from(Map<String, dynamic> map) {
+  factory CaseEntity.fromMap(Map<String, dynamic> map) {
     return CaseEntity(
       caseId: map["caseId"],
       caseTitle: map["caseTitle"],
@@ -87,6 +89,7 @@ class CaseEntity {
       clientName: map["clientName"],
       clientPhoneNo: map["clientPhoneNo"],
       caseLocation: map["caseLocation"] as GeoPoint,
+      photoUrl: map["photoUrl"],
       technicianId: map["technicianId"],
       technicianName: map["technicianName"],
       technicianPhoneNo: map["technicianPhoneNo"],
@@ -112,6 +115,7 @@ class CaseEntity {
       'clientName': clientName,
       'clientPhoneNo': clientPhoneNo,
       'caseLocation': caseLocation,
+      'photoUrl': photoUrl,
       'technicianId': technicianId,
       'technicianName': technicianName,
       'technicianPhoneNo': technicianPhoneNo,

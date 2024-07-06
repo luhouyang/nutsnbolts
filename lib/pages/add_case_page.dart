@@ -250,7 +250,7 @@ class _AddCasePageState extends State<AddCasePage> {
                                 // check for image
                                 if (picBytes != null && location != null) {
                                   // post image/case
-                                  await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!, location!).then(
+                                  await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!, location!, serviceType!).then(
                                     (CaseEntity caseEntity) {
                                       // pass CaseEntity to ChatPage for OpenAI API call
                                       Navigator.of(context).pushReplacement(MaterialPageRoute(

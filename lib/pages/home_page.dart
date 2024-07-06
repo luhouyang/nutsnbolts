@@ -3,6 +3,8 @@ import 'dart:async';
 
 // Flutter imports
 import 'package:flutter/material.dart';
+import 'package:nutsnbolts/model/firestore_model.dart';
+import 'package:nutsnbolts/widgets/my_money_field.dart';
 import 'package:provider/provider.dart';
 
 // Third-party package imports
@@ -29,13 +31,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController moneyController = TextEditingController();
+
   final StreamController<void> _rebuildStream = StreamController.broadcast();
   FlutterMap? map;
 
   bool _work = false;
 
+  List<CaseEntity> caseList = [];
+
+  Future<void> getCaseList() async {
+    UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
+    caseList = await FirestoreModel().getRecommendCases(userUsecase);
+    _getMap();
+  }
+
   @override
   void initState() {
+    getCaseList();
     _getMap(); // initialize data
     super.initState();
   }
@@ -282,8 +295,7 @@ class _HomePageState extends State<HomePage> {
                                         const NeverScrollableScrollPhysics(),
                                     itemCount: snapshot.data!.size,
                                     itemBuilder: (context, index) {
-                                      CaseEntity caseEntity = CaseEntity.from(
-                                          snapshot.data!.docs[index].data());
+                                      CaseEntity caseEntity = CaseEntity.fromMap(snapshot.data!.docs[index].data());
 
                                       return CaseCard(caseEntity: caseEntity);
                                     },
@@ -331,8 +343,7 @@ class _HomePageState extends State<HomePage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: snapshot.data!.size,
                                 itemBuilder: (context, index) {
-                                  CaseEntity caseEntity = CaseEntity.from(
-                                      snapshot.data!.docs[index].data());
+                                  CaseEntity caseEntity = CaseEntity.fromMap(snapshot.data!.docs[index].data());
 
                                   return CaseCard(caseEntity: caseEntity);
                                 },
@@ -365,7 +376,96 @@ class _HomePageState extends State<HomePage> {
               retinaMode: true,
               urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
           // live location, orientation tracker
-          currerntLocationandOrientation()
+          currerntLocationandOrientation(),
+          if (caseList.isNotEmpty)
+            MarkerLayer(
+              markers: caseList.map((caseEntity) {
+                GeoPoint geoPoint = caseEntity.caseLocation;
+                return Marker(
+                    point: LatLng(geoPoint.latitude, geoPoint.longitude),
+                    width: 80,
+                    height: 80,
+                    child: InkWell(
+                        onHover: (val) {},
+                        onTap: () {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          height: MediaQuery.of(context).size.height * 0.3,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius: BorderRadius.circular(20),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                caseEntity.publicImageLink,
+                                              ),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        MyMoneyTextField(controller: moneyController)
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text(
+                                          'Cancel',
+                                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text(
+                                          'Confirm',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                        onPressed: () async {
+                                          UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
+                                          await FirestoreModel().addBid(moneyController.text, userUsecase, caseEntity).then(
+                                            (value) {
+                                              Navigator.of(context).pop();
+                                            },
+                                          );
+                                        },
+                                      )
+                                    ]);
+                              });
+                        },
+                        child: Stack(
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              color: Colors.red,
+                              size: 50.0,
+                            ),
+                            Positioned(
+                              top: 7,
+                              left: 9,
+                              child: SizedBox(
+                                height: 30,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Image.network(caseEntity.photoUrl),
+                                ),
+                              ),
+                            ),
+                            Positioned(top: 0, child: Text(caseEntity.type)),
+                          ],
+                        )));
+              }).toList(),
+            )
         ],
       );
     });
@@ -373,7 +473,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget currerntLocationandOrientation() {
     return CurrentLocationLayer(
-      alignPositionOnUpdate: AlignOnUpdate.always,
+      // alignPositionOnUpdate: AlignOnUpdate.always,
       alignDirectionOnUpdate: AlignOnUpdate.never,
       style: const LocationMarkerStyle(
         marker: DefaultLocationMarker(

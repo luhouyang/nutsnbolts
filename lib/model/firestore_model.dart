@@ -16,7 +16,6 @@ import 'package:location/location.dart';
 import 'package:nutsnbolts/entities/bid_entity.dart';
 import 'package:nutsnbolts/entities/message_entity.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
-import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/entities/user_entity.dart';
 
 // Local project imports - Model, services, use cases
@@ -50,9 +49,10 @@ class FirestoreModel {
           userName: user!.displayName!,
           email: user.email!,
           phoneNo: "",
+          photoUrl: user.photoURL!,
           location: GeoPoint(location.latitude!, location.longitude!),
           isTechnician: false,
-          specialty: Specialty.homeRepair.value,
+          specialty: [],
           rating: 5,
           numRating: 1,
           nuts: []);
@@ -70,7 +70,8 @@ class FirestoreModel {
   //
   // case
   //
-  Future<CaseEntity> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase, File picFile, Uint8List picBytes, LatLng location) async {
+  Future<CaseEntity> addCase(
+      Map<String, dynamic> controllers, UserUsecase userUsecase, File picFile, Uint8List picBytes, LatLng location, String type) async {
     String docId = firebaseFirestore.collection('cases').doc().id;
 
     String imagePath = "$docId${p.extension(picFile.path)}";
@@ -82,7 +83,7 @@ class FirestoreModel {
         caseDesc: controllers[CaseEntityAttr.caseDesc.value].text,
         casePosted: Timestamp.fromDate(DateTime.now()),
         status: 0,
-        type: Specialty.homeRepair.value,
+        type: type,
         finalPrice: 0.0,
         imageLink: imagePath,
         publicImageLink: '',
@@ -90,6 +91,7 @@ class FirestoreModel {
         clientName: userUsecase.userEntity.userName,
         clientPhoneNo: userUsecase.userEntity.phoneNo,
         caseLocation: GeoPoint(location.latitude, location.longitude),
+        photoUrl: userUsecase.userEntity.photoUrl,
         technicianId: '',
         technicianName: '',
         technicianPhoneNo: '',
@@ -137,6 +139,17 @@ class FirestoreModel {
     technicianUser.nuts.add(caseEntity.caseId);
 
     await firebaseFirestore.collection('users').doc(caseEntity.technicianId).set(technicianUser.toMap());
+  }
+
+  Future<List<CaseEntity>> getRecommendCases(UserUsecase userUsecase) async {
+    QuerySnapshot snapshot = await firebaseFirestore.collection('cases')
+    // .where('type', isEqualTo: userUsecase.userEntity.specialty)
+    .get();
+    List<CaseEntity> caseList = [];
+    for (var data in snapshot.docs) {
+      caseList.add(CaseEntity.fromMap(data.data() as Map<String, dynamic>));
+    }
+    return caseList;
   }
 
   //

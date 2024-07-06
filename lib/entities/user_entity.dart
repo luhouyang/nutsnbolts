@@ -5,9 +5,10 @@ class UserEntity {
   String userName;
   String email;
   String phoneNo;
+  String photoUrl;
   GeoPoint location;
   bool isTechnician;
-  String specialty;
+  List<dynamic> specialty;
   double rating;
   int numRating;
   List<dynamic> nuts;
@@ -17,6 +18,7 @@ class UserEntity {
       required this.userName,
       required this.email,
       required this.phoneNo,
+      required this.photoUrl,
       required this.location,
       required this.isTechnician,
       required this.specialty,
@@ -30,6 +32,7 @@ class UserEntity {
       userName: map["userName"],
       email: map["email"],
       phoneNo: map["phoneNo"],
+      photoUrl: map["photoUrl"],
       location: map["location"] as GeoPoint,
       isTechnician: map["isTechnician"],
       specialty: map["specialty"],
@@ -45,6 +48,7 @@ class UserEntity {
       'userName': userName,
       'email': email,
       'phoneNo': phoneNo,
+      'photoUrl': photoUrl,
       'location': location,
       'isTechnician': isTechnician,
       'specialty': specialty,

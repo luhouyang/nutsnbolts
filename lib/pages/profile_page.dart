@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nutsnbolts/pages/become_technician.dart';
+import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
+
     return Center(
       child: Column(
         children: [
@@ -26,10 +31,7 @@ class ProfilePage extends StatelessWidget {
             ),
             child: Text(
               "Profile Page",
-              style: TextStyle(
-                  color: MyColours.secondaryColour,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(color: MyColours.secondaryColour, fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
@@ -41,7 +43,7 @@ class ProfilePage extends StatelessWidget {
               children: [
                 const ProfileWidget(),
                 const SizedBox(height: 10),
-                UserNameWidget(),
+                const UserNameWidget(),
                 const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
@@ -50,18 +52,32 @@ class ProfilePage extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.red,
-                        shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
+                        shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
                     child: const Text(
                       "Log Out",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
                       FirebaseAuth.instance.signOut();
                     },
                   ),
                 ),
+                if (userUsecase.userEntity.isTechnician)
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.all(10),
+                            backgroundColor: MyColours.primaryColour,
+                            foregroundColor: MyColours.secondaryColour,
+                            shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const BecomeTechnicianPage(),
+                          ));
+                        },
+                        child: const Text("Edit Your Specialty")),
+                  ),
               ],
             ),
           ),
