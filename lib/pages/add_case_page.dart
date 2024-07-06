@@ -10,6 +10,7 @@ import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/pages/chat_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
+import 'package:nutsnbolts/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class AddCasePage extends StatefulWidget {
@@ -36,163 +37,247 @@ class _AddCasePageState extends State<AddCasePage> {
     return Scaffold(
       body: Consumer<UserUsecase>(
         builder: (context, userUsecase, child) {
-          return Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please enter value';
-                          }
-                          return null;
-                        },
-                        controller: caseTitleController,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            focusColor: Colors.amber[100],
-                            hintText: "case title",
-                            hintStyle: const TextStyle(color: Colors.black)),
-                      ),
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(25, 50, 25, 15),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Colors.amber,
+                        Colors.amber[800]!,
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please enter value';
-                          }
-                          return null;
-                        },
-                        controller: caseDescController,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            focusColor: Colors.amber[100],
-                            hintText: "case description",
-                            hintStyle: const TextStyle(color: Colors.black)),
-                      ),
-                    ),
+                  child: Text(
+                    "Add A Case",
+                    style: TextStyle(
+                        color: MyColours.secondaryColour,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
-                  imagePickerWidget(), // ui is at line 220-326
-                  DropdownButtonFormField2<String>(
-                    isExpanded: true,
-                    decoration: InputDecoration(
-                      // Add Horizontal padding using menuItemStyleData.padding so it matches
-                      // the menu padding when button's width is not specified.
-                      contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      // Add more decoration..
-                    ),
-                    hint: const Text(
-                      'Service Category',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    items: Specialty.values
-                        .map((item) => DropdownMenuItem<String>(
-                              value: item.value,
-                              child: Text(
-                                item.value,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Text(
+                          "Title",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please enter value';
+                            }
+                            return null;
+                          },
+                          controller: caseTitleController,
+                          style: const TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.transparent,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
-                            ))
-                        .toList(),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select category';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      //Do something when selected item is changed.
-                    },
-                    onSaved: (value) {
-                      serviceType = value.toString();
-                    },
-                    buttonStyleData: const ButtonStyleData(
-                      padding: EdgeInsets.only(right: 8),
-                    ),
-                    iconStyleData: const IconStyleData(
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.black45,
-                      ),
-                      iconSize: 24,
-                    ),
-                    dropdownStyleData: DropdownStyleData(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    menuItemStyleData: const MenuItemStyleData(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              focusColor: Colors.amber[100],
+                              hintText: "Enter case title here.",
+                              hintStyle: const TextStyle(color: Colors.grey)),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please enter value';
+                            }
+                            return null;
+                          },
+                          controller: caseDescController,
+                          style: const TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.transparent,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              focusColor: Colors.amber[100],
+                              hintText: "Enter case Description here.",
+                              hintStyle: const TextStyle(color: Colors.grey)),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        // ui is at line 220-326
+                        const Text(
+                          "Category",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        DropdownButtonFormField2<String>(
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            // Add Horizontal padding using menuItemStyleData.padding so it matches
+                            // the menu padding when button's width is not specified.
+                            contentPadding:
+                                const EdgeInsets.symmetric(vertical: 16),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            // Add more decoration..
+                          ),
+                          hint: const Text(
+                            'Service Category',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          items: Specialty.values
+                              .map((item) => DropdownMenuItem<String>(
+                                    value: item.value,
+                                    child: Text(
+                                      item.value,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please select category';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            //Do something when selected item is changed.
+                          },
+                          onSaved: (value) {
+                            serviceType = value.toString();
+                          },
+                          buttonStyleData: const ButtonStyleData(
+                            padding: EdgeInsets.only(right: 8),
+                          ),
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black45,
+                            ),
+                            iconSize: 24,
+                          ),
+                          dropdownStyleData: DropdownStyleData(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          menuItemStyleData: const MenuItemStyleData(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        const Text(
+                          "Pick an Image",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        imagePickerWidget(),
+                        // Submit button is here!
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(10),
+                                  backgroundColor: MyColours.primaryColour,
+                                  foregroundColor: MyColours.secondaryColour,
+                                  shape: ContinuousRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
+                              onPressed: () async {
+                                // validation
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                }
+                                // check for image
+                                if (picBytes != null) {
+                                  // post image/case
+                                  await FirestoreModel()
+                                      .addCase(controllers, userUsecase,
+                                          picFile!, picBytes!)
+                                      .then(
+                                    (CaseEntity caseEntity) {
+                                      // pass CaseEntity to ChatPage for OpenAI API call
+                                      Navigator.of(context)
+                                          .pushReplacement(MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChatPage(caseEntity: caseEntity),
+                                      ));
+                                    },
+                                  );
+                                }
+                                // // makeApiCall() function is at the bottom of the file
+                                // // please check if this implmementation is correct
+                                // if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                                //   makeApiCall().then((response) {
+                                //     Navigator.of(context).pop();
+                                //     ScaffoldMessenger.of(context).showSnackBar(
+                                //       const SnackBar(
+                                //         content: Text("Case added successfully"),
+                                //       ),
+                                //     );
+                                //   }).catchError((error) {
+                                //     // Handle any errors here
+                                //   });
+                                // }
+                              },
+                              child: const Text(
+                                "Submit",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              )),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        )
+                      ],
                     ),
                   ),
-                  // Submit button is here!
-                  ElevatedButton(
-                      onPressed: () async {
-                        // validation
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                        }
-                        // check for image
-                        if (picBytes != null) {
-                          // post image/case
-                          await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
-                            (CaseEntity caseEntity) {
-                              // pass CaseEntity to ChatPage for OpenAI API call
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                builder: (context) => ChatPage(caseEntity: caseEntity),
-                              ));
-                            },
-                          );
-                        }
-                        // // makeApiCall() function is at the bottom of the file
-                        // // please check if this implmementation is correct
-                        // if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                        //   makeApiCall().then((response) {
-                        //     Navigator.of(context).pop();
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       const SnackBar(
-                        //         content: Text("Case added successfully"),
-                        //       ),
-                        //     );
-                        //   }).catchError((error) {
-                        //     // Handle any errors here
-                        //   });
-                        // }
-                      },
-                      child: const Text("submit"))
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
@@ -246,7 +331,9 @@ class _AddCasePageState extends State<AddCasePage> {
                 padding: const EdgeInsets.all(8.0),
                 height: MediaQuery.of(context).size.width * 0.5,
                 width: MediaQuery.of(context).size.width * 0.5,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    border: Border.all(color: Colors.black)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -260,7 +347,8 @@ class _AddCasePageState extends State<AddCasePage> {
                         Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: IconButton(
                                 onPressed: () async {
                                   getImageFromGallery();
@@ -275,7 +363,8 @@ class _AddCasePageState extends State<AddCasePage> {
                         Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: IconButton(
                                 onPressed: () async {
                                   getImageFromCamera();
@@ -307,7 +396,9 @@ class _AddCasePageState extends State<AddCasePage> {
                       padding: const EdgeInsets.all(8.0),
                       height: MediaQuery.of(context).size.width,
                       width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.0),
+                          border: Border.all(color: Colors.black)),
                       child: Container(
                         height: 400,
                         width: 400,
@@ -349,7 +440,8 @@ class _AddCasePageState extends State<AddCasePage> {
           sourcePath: pickedFile.path,
           maxHeight: 1080,
           maxWidth: 1080,
-          compressFormat: ImageCompressFormat.jpg, // maybe change later, test quality first
+          compressFormat:
+              ImageCompressFormat.jpg, // maybe change later, test quality first
           compressQuality: 30,
           aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0));
 

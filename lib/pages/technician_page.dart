@@ -134,9 +134,9 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                 decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(20),
-                                  image: const DecorationImage(
+                                  image: DecorationImage(
                                     image: NetworkImage(
-                                      "https://firebasestorage.googleapis.com/v0/b/nutsnbolts-1.appspot.com/o/xLFVxQN5jkfOQefmxrJiTuf2FnD2%2FomciwGjEpXnwtKKaT1FF.jpg?alt=media&token=7be9dce1-df40-4595-87e7-981bc919c647",
+                                      caseEntity.publicImageLink,
                                     ),
                                     fit: BoxFit.cover,
                                   ),
