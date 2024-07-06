@@ -13,6 +13,7 @@ import 'package:location/location.dart';
 
 // Local project imports - Entities
 import 'package:nutsnbolts/entities/bid_entity.dart';
+import 'package:nutsnbolts/entities/message_entity.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/entities/user_entity.dart';
@@ -156,5 +157,32 @@ class FirestoreModel {
   //
   // chat
   //
-  Future<void> updateChat() async {}
+  Future<List<MessageEntity>> getChat(CaseEntity caseEntity) async {
+    QuerySnapshot snapshot = await firebaseFirestore
+        .collection('cases')
+        .doc(caseEntity.caseId)
+        .collection('chat')
+        .orderBy('createdAt', descending: true)
+        .limit(5)
+        .get();
+
+    List<MessageEntity> mssgs = [];
+
+    if (snapshot.docs.isNotEmpty) {
+      for (var element in snapshot.docs) {
+        mssgs
+            .add(MessageEntity.fromMap(element.data() as Map<String, dynamic>));
+      }
+    }
+
+    return mssgs;
+  }
+
+  Future<void> updateChat(MessageEntity messageEntity, String caseId) async {
+    await firebaseFirestore
+        .collection('cases')
+        .doc(caseId)
+        .collection('chat')
+        .add(messageEntity.toMap());
+  }
 }
