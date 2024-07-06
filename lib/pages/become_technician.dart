@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
+import 'package:nutsnbolts/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class BecomeTechnicianPage extends StatefulWidget {
@@ -30,17 +31,13 @@ class _BecomeTechnicianPageState extends State<BecomeTechnicianPage> {
                   const SizedBox(
                     height: 30,
                   ),
-
                   DropdownButtonFormField2<String>(
                     isExpanded: true,
                     decoration: InputDecoration(
-                      // Add Horizontal padding using menuItemStyleData.padding so it matches
-                      // the menu padding when button's width is not specified.
                       contentPadding: const EdgeInsets.symmetric(vertical: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      // Add more decoration..
                     ),
                     hint: const Text(
                       'Service Category',
@@ -63,9 +60,7 @@ class _BecomeTechnicianPageState extends State<BecomeTechnicianPage> {
                       }
                       return null;
                     },
-                    onChanged: (value) {
-                      //Do something when selected item is changed.
-                    },
+                    onChanged: (value) {},
                     onSaved: (value) {
                       serviceType = value.toString();
                     },
@@ -88,18 +83,24 @@ class _BecomeTechnicianPageState extends State<BecomeTechnicianPage> {
                       padding: EdgeInsets.symmetric(horizontal: 16),
                     ),
                   ),
-                  // Submit button is here! TODO: style this button
-                  ElevatedButton(
-                      onPressed: () async {
-                        // validation
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                        }
-                        await userUsecase.signupTechnician(serviceType!).then(
-                              (value) => Navigator.of(context).pop(),
-                            );
-                      },
-                      child: const Text("submit"))
+                  SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.all(10),
+                              backgroundColor: MyColours.primaryColour,
+                              foregroundColor: MyColours.secondaryColour,
+                              shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                          onPressed: () async {
+                            // validation
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                            }
+                            await userUsecase.signupTechnician(serviceType!).then(
+                                  (value) => Navigator.of(context).pop(),
+                                );
+                          },
+                          child: const Text("submit")))
                 ],
               ),
             ),

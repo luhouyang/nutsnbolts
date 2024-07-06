@@ -63,10 +63,7 @@ class _AddCasePageState extends State<AddCasePage> {
                   ),
                   child: Text(
                     "Add A Case",
-                    style: TextStyle(
-                        color: MyColours.secondaryColour,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: MyColours.secondaryColour, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(
@@ -85,8 +82,7 @@ class _AddCasePageState extends State<AddCasePage> {
                         ),
                         const Text(
                           "Title",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         TextFormField(
                           validator: (value) {
@@ -101,13 +97,11 @@ class _AddCasePageState extends State<AddCasePage> {
                               filled: true,
                               fillColor: Colors.transparent,
                               enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
+                                borderSide: const BorderSide(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
+                                borderSide: const BorderSide(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
                               focusColor: Colors.amber[100],
@@ -119,8 +113,7 @@ class _AddCasePageState extends State<AddCasePage> {
                         ),
                         const Text(
                           "Description",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         TextFormField(
                           validator: (value) {
@@ -135,13 +128,11 @@ class _AddCasePageState extends State<AddCasePage> {
                               filled: true,
                               fillColor: Colors.transparent,
                               enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
+                                borderSide: const BorderSide(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
+                                borderSide: const BorderSide(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
                               focusColor: Colors.amber[100],
@@ -154,20 +145,15 @@ class _AddCasePageState extends State<AddCasePage> {
                         // ui is at line 220-326
                         const Text(
                           "Category",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         DropdownButtonFormField2<String>(
                           isExpanded: true,
                           decoration: InputDecoration(
-                            // Add Horizontal padding using menuItemStyleData.padding so it matches
-                            // the menu padding when button's width is not specified.
-                            contentPadding:
-                                const EdgeInsets.symmetric(vertical: 16),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            // Add more decoration..
                           ),
                           hint: const Text(
                             'Service Category',
@@ -190,9 +176,7 @@ class _AddCasePageState extends State<AddCasePage> {
                             }
                             return null;
                           },
-                          onChanged: (value) {
-                            //Do something when selected item is changed.
-                          },
+                          onChanged: (value) {},
                           onSaved: (value) {
                             serviceType = value.toString();
                           },
@@ -220,11 +204,9 @@ class _AddCasePageState extends State<AddCasePage> {
                         ),
                         const Text(
                           "Pick an Image",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         imagePickerWidget(),
-                        // Submit button is here!
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
@@ -232,8 +214,7 @@ class _AddCasePageState extends State<AddCasePage> {
                                   padding: const EdgeInsets.all(10),
                                   backgroundColor: MyColours.primaryColour,
                                   foregroundColor: MyColours.secondaryColour,
-                                  shape: ContinuousRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20))),
+                                  shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
                               onPressed: () async {
                                 // validation
                                 if (_formKey.currentState!.validate()) {
@@ -242,16 +223,11 @@ class _AddCasePageState extends State<AddCasePage> {
                                 // check for image
                                 if (picBytes != null) {
                                   // post image/case
-                                  await FirestoreModel()
-                                      .addCase(controllers, userUsecase,
-                                          picFile!, picBytes!)
-                                      .then(
+                                  await FirestoreModel().addCase(controllers, userUsecase, picFile!, picBytes!).then(
                                     (CaseEntity caseEntity) {
                                       // pass CaseEntity to ChatPage for OpenAI API call
-                                      Navigator.of(context)
-                                          .pushReplacement(MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChatPage(caseEntity: caseEntity),
+                                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                        builder: (context) => ChatPage(caseEntity: caseEntity),
                                       ));
                                     },
                                   );
@@ -273,8 +249,7 @@ class _AddCasePageState extends State<AddCasePage> {
                               },
                               child: const Text(
                                 "Submit",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               )),
                         ),
                         const SizedBox(
@@ -338,9 +313,7 @@ class _AddCasePageState extends State<AddCasePage> {
                 padding: const EdgeInsets.all(8.0),
                 height: MediaQuery.of(context).size.width * 0.5,
                 width: MediaQuery.of(context).size.width * 0.5,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    border: Border.all(color: Colors.black)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -354,8 +327,7 @@ class _AddCasePageState extends State<AddCasePage> {
                         Column(
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 8.0, right: 8.0),
+                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: IconButton(
                                 onPressed: () async {
                                   getImageFromGallery();
@@ -370,8 +342,7 @@ class _AddCasePageState extends State<AddCasePage> {
                         Column(
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 8.0, right: 8.0),
+                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: IconButton(
                                 onPressed: () async {
                                   getImageFromCamera();
@@ -403,9 +374,7 @@ class _AddCasePageState extends State<AddCasePage> {
                       padding: const EdgeInsets.all(8.0),
                       height: MediaQuery.of(context).size.width,
                       width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.0),
-                          border: Border.all(color: Colors.black)),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0), border: Border.all(color: Colors.black)),
                       child: Container(
                         height: 400,
                         width: 400,
@@ -447,8 +416,7 @@ class _AddCasePageState extends State<AddCasePage> {
           sourcePath: pickedFile.path,
           maxHeight: 1080,
           maxWidth: 1080,
-          compressFormat:
-              ImageCompressFormat.jpg, // maybe change later, test quality first
+          compressFormat: ImageCompressFormat.jpg, // maybe change later, test quality first
           compressQuality: 30,
           aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0));
 

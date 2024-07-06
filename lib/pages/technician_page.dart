@@ -137,18 +137,17 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                       backgroundColor: Colors.amber,
                                       content: MyMoneyTextField(controller: moneyController),
                                       actions: <Widget>[
-                                        // TODO: style this button
                                         TextButton(
                                           child: const Text(
                                             'Cancel',
-                                            style: TextStyle(color: Colors.red),
+                                            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                                           ),
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
                                         ),
                                         TextButton(
-                                          child: const Text('Confirm'),
+                                          child: const Text('Confirm', style: TextStyle(fontWeight: FontWeight.bold),),
                                           onPressed: () async {
                                             await FirestoreModel().addBid(moneyController.text, userUsecase, caseEntity).then(
                                               (value) {
