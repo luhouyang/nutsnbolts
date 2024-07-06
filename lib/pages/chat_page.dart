@@ -36,8 +36,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> _fetchAnalysis() async {
-    const url =
-        'https://api.openai.com/v1/chat/completions'; // Assuming this is the correct endpoint
+    const url = 'https://api.openai.com/v1/chat/completions';
     final apiKey = Env.apiKey;
 
     final headers = {
