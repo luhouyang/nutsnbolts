@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/message_entity.dart';
+import 'package:nutsnbolts/entities/user_entity.dart';
 import 'package:nutsnbolts/env/env.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
@@ -96,10 +97,11 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
+    UserEntity userEntity = userUsecase.userEntity;
 
     ChatUser user1 = ChatUser(
       id: '1',
-      firstName: userUsecase.userEntity.uid == widget.caseEntity.clientId ? widget.caseEntity.clientName : widget.caseEntity.technicianName,
+      firstName: userEntity.uid == widget.caseEntity.clientId ? widget.caseEntity.clientName : widget.caseEntity.technicianName,
     );
     ChatUser assistant = ChatUser(
       id: '2',
@@ -107,12 +109,13 @@ class _ChatPageState extends State<ChatPage> {
     );
     ChatUser user2 = ChatUser(
       id: '3',
-      firstName: userUsecase.userEntity.uid == widget.caseEntity.technicianId ? widget.caseEntity.technicianName : widget.caseEntity.clientName,
+      firstName: userEntity.uid == widget.caseEntity.technicianId ? widget.caseEntity.clientName : widget.caseEntity.technicianName,
     );
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Chat Page'),
+          title:
+              Text('Chat with ${userEntity.uid == widget.caseEntity.technicianId ? widget.caseEntity.clientName : widget.caseEntity.technicianName}'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -149,15 +152,9 @@ class _ChatPageState extends State<ChatPage> {
               for (MessageEntity msg in messageEntityList) {
                 if (msg.userId.isNotEmpty) {
                   if (msg.userId == userUsecase.userEntity.uid) {
-                    messages.add(ChatMessage(
-                      text: msg.text,
-                      user: user1,
-                      createdAt: msg.createdAt.toDate()));
+                    messages.add(ChatMessage(text: msg.text, user: user1, createdAt: msg.createdAt.toDate()));
                   } else {
-                    messages.add(ChatMessage(
-                      text: msg.text,
-                      user: user2,
-                      createdAt: msg.createdAt.toDate()));
+                    messages.add(ChatMessage(text: msg.text, user: user2, createdAt: msg.createdAt.toDate()));
                   }
                 } else {
                   messages.add(ChatMessage(text: msg.text, user: assistant, createdAt: msg.createdAt.toDate()));

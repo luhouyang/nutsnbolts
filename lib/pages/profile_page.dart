@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class ProfilePage extends StatelessWidget {
             padding: const EdgeInsets.all(25),
             child: Column(
               children: [
-                ProfileWidget(),
+                const ProfileWidget(),
                 const SizedBox(height: 10),
                 UserNameWidget(),
                 const SizedBox(height: 20),
@@ -72,6 +72,8 @@ class ProfilePage extends StatelessWidget {
 }
 
 class ProfileWidget extends StatelessWidget {
+  const ProfileWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
@@ -83,6 +85,8 @@ class ProfileWidget extends StatelessWidget {
 }
 
 class UserNameWidget extends StatelessWidget {
+  const UserNameWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
