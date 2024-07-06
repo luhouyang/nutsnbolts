@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
@@ -16,14 +16,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void initState() {
-    UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
-    userUsecase.getUser('uid');
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Consumer<UserUsecase>(
       builder: (context, userUsecase, child) {
         return SingleChildScrollView(
@@ -50,30 +45,29 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               "nuts & bolts.",
-                              style: TextStyle(
-                                  color: MyColours.secondaryColour,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold),
+                              style: TextStyle(color: MyColours.secondaryColour, fontSize: 28, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "Welcome, ${userUsecase.userEntity.userName}!",
-                              style: TextStyle(
-                                  color: Colors.white.withOpacity(0.8),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600),
+                              "Welcome, ${user!.displayName}!",
+                              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 18, fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: MyColours.secondaryColour,
-                              borderRadius: BorderRadius.circular(50)),
-                          child: Icon(
-                            Icons.person,
-                            color: MyColours.primaryColour,
+                        // Container(
+                        //   padding: const EdgeInsets.all(10),
+                        //   decoration: BoxDecoration(color: MyColours.secondaryColour, borderRadius: BorderRadius.circular(50)),
+                        //   child: Icon(
+                        //     Icons.person,
+                        //     color: MyColours.primaryColour,
+                        //   ),
+                        // )
+                        SizedBox(
+                          height: 75,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.network(user.photoURL!),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     const SizedBox(
@@ -91,13 +85,11 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           const Text(
                             "Want something fixed?",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 15),
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           Text(
                             "Get a technician now!",
-                            style: TextStyle(
-                                fontSize: 14, color: Colors.grey[700]),
+                            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                           ),
                         ],
                       ),
@@ -114,8 +106,7 @@ class _HomePageState extends State<HomePage> {
                     .limit(5)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData ||
-                      snapshot.connectionState == ConnectionState.waiting) {
+                  if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
                     return Column(
                       children: [
                         SizedBox(
@@ -135,8 +126,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         const Text(
                           "Your Cases",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         const SizedBox(
                           height: 10,
@@ -147,8 +137,7 @@ class _HomePageState extends State<HomePage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.size,
                           itemBuilder: (context, index) {
-                            CaseEntity caseEntity = CaseEntity.from(
-                                snapshot.data!.docs[index].data());
+                            CaseEntity caseEntity = CaseEntity.from(snapshot.data!.docs[index].data());
                             return CaseCard(caseEntity: caseEntity);
                           },
                         ),

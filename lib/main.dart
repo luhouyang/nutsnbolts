@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
           create: (context) => UserUsecase(),
         ),
       ],
-      child: const MaterialApp(debugShowCheckedModeBanner: false, home: RoutePage()),
+      child: const MaterialApp(debugShowCheckedModeBanner: false, home: AuthGate()),
     );
   }
 }

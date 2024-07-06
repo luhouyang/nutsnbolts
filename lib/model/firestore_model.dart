@@ -1,7 +1,12 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
+import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/entities/user_entity.dart';
+import 'package:nutsnbolts/services/location_service.dart';
 import 'package:nutsnbolts/testdata/test_data.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 
@@ -13,8 +18,30 @@ class FirestoreModel {
   }
 
   Future<UserEntity> getUser(String uid) async {
-    DocumentSnapshot doc = await firebaseFirestore.collection('users').doc(uid).get();
-    return UserEntity.fromMap(doc.data() as Map<String, dynamic>);
+    try {
+      DocumentSnapshot doc = await firebaseFirestore.collection('users').doc(uid).get();
+      return UserEntity.fromMap(doc.data() as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint("Error: $e");
+
+      LocationData location = await LocationService().getLiveLocation();
+
+      final user = FirebaseAuth.instance.currentUser;
+
+      UserEntity userEntity = UserEntity(
+          uid: uid,
+          userName: user!.displayName!,
+          email: user.email!,
+          phoneNo: user.phoneNumber!,
+          location: GeoPoint(location.latitude!, location.longitude!),
+          isTechnician: false,
+          specialty: Specialty.homeRepair.value,
+          rating: 0);
+
+      await addUser(userEntity);
+      
+      return userEntity;
+    }
   }
 
   Future<void> addCase(Map<String, dynamic> controllers, UserUsecase userUsecase, Uint8List picBytes, String picPath) async {
