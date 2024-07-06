@@ -219,8 +219,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           TileLayer(
               retinaMode: true,
-              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              subdomains: ['a', 'b', 'c']),
+              urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
           // live location, orientation tracker
           currerntLocationandOrientation()
         ],
