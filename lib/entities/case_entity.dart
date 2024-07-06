@@ -9,7 +9,6 @@ enum CaseEntityAttr {
   caseId("caseId"),
   caseTitle("caseTitle"),
   caseDesc("caseDesc"),
-  clientPrice("clientPrice"),
   type("type");
 
   final String value;
@@ -38,7 +37,6 @@ class CaseEntity {
   GeoPoint technicianLocation; // live location of technician when heading to house?
 
   // during negotiation
-  double clientPrice; // user
   double technicianPrice; // only lowest price gets stored, this price is final price
 
   // after confirm technician
@@ -58,7 +56,6 @@ class CaseEntity {
       required this.technicianName,
       required this.technicianPhoneNo,
       required this.technicianLocation,
-      required this.clientPrice,
       required this.technicianPrice,
       required this.appointment,
       required this.caseResolvedTime,
@@ -79,7 +76,6 @@ class CaseEntity {
       technicianName: map["technicianName"],
       technicianPhoneNo: map["technicianPhoneNo"],
       technicianLocation: map["technicianLocation"],
-      clientPrice: map["clientPrice"],
       technicianPrice: map["technicianPrice"],
       appointment: map["appointment"] as Timestamp,
       caseResolvedTime: map["caseResolvedTime"] as Timestamp,
@@ -101,10 +97,9 @@ class CaseEntity {
       'technicianName': technicianName,
       'technicianPhoneNo': technicianPhoneNo,
       'technicianLocation': technicianLocation,
-      'clientPrice': clientPrice,
       'technicianPrice': technicianPrice,
       'appointment': appointment,
-      'caseResolvedTime': caseResolvedTime,
+      'caseResolvedTime': caseResolvedTime, 
     };
   }
 }

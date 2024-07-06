@@ -17,7 +17,6 @@ class TestData {
       technicianName: 'technicianName',
       technicianPhoneNo: 'technicianPhoneNo',
       technicianLocation: const GeoPoint(82.44, 87.05),
-      clientPrice: 20,
       technicianPrice: 22.5,
       appointment: Timestamp.fromDate(DateTime.now()),
       caseResolvedTime: Timestamp.fromDate(DateTime.now()));

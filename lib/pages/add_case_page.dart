@@ -8,7 +8,6 @@ import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/enums/enums.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
-import 'package:nutsnbolts/widgets/my_money_field.dart';
 import 'package:provider/provider.dart';
 
 class AddCasePage extends StatefulWidget {
@@ -21,7 +20,6 @@ class AddCasePage extends StatefulWidget {
 class _AddCasePageState extends State<AddCasePage> {
   TextEditingController caseTitleController = TextEditingController();
   TextEditingController caseDescController = TextEditingController();
-  TextEditingController moneyController = TextEditingController(text: "0.0");
 
   String? serviceType;
   final _formKey = GlobalKey<FormState>();
@@ -31,7 +29,6 @@ class _AddCasePageState extends State<AddCasePage> {
     Map<String, dynamic> controllers = {
       CaseEntityAttr.caseTitle.value: caseTitleController,
       CaseEntityAttr.caseDesc.value: caseDescController,
-      CaseEntityAttr.clientPrice.value: moneyController
     };
 
     return Scaffold(
@@ -99,7 +96,6 @@ class _AddCasePageState extends State<AddCasePage> {
                       ),
                     ),
                   ),
-                  MyMoneyTextField(controller: moneyController),
                   imagePickerWidget(), // ui is at line 220-326
                   DropdownButtonFormField2<String>(
                     isExpanded: true,
