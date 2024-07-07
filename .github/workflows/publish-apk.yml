@@ -27,12 +27,14 @@ jobs:
         channel: 'stable' # 'dev', 'alpha', default to: 'stable'
         flutter-version: 3.22.1
         # flutter-version: '1.12.x' # you can also specify exact version of flutter
+    - env:
+       API_KEY: ${{ secrets.OPENAI_API_KEY }}
     
     # Get flutter dependencies.
     - run: flutter pub get
 
     # Set environment variable and run build
-    - run: echo '${{ BUILD_DEV_APK.OPENAI_API_KEY }}' > .env
+    - run: echo '$env:API_KEY' > .env
     - run: dart run build_runner build
     
     # Statically analyze the Dart code for any errors.
