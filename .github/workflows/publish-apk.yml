@@ -5,8 +5,7 @@ name: Flutter CI
 on:
   push:
     branches:
-    # - main
-    - paused
+    - main
     
 # on: push    # Default will running for every branch.
     
@@ -31,6 +30,9 @@ jobs:
     
     # Get flutter dependencies.
     - run: flutter pub get
+
+    # Set environment variable and run build
+    - run: echo '${{ BUILD_DEV_APK.OPENAI_API_KEY }}' > .env
     - run: dart run build_runner build
     
     # Statically analyze the Dart code for any errors.
