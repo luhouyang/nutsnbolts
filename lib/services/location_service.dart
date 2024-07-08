@@ -1,5 +1,6 @@
 // Flutter imports
 import 'package:flutter/material.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 // Third-party package imports
@@ -130,5 +131,22 @@ class LocationService {
     // }
 
     return currentLocation;
+  }
+
+  Widget currerntLocationandOrientation() {
+    return CurrentLocationLayer(
+      alignPositionOnUpdate: AlignOnUpdate.always,
+      alignDirectionOnUpdate: AlignOnUpdate.never,
+      style: const LocationMarkerStyle(
+        marker: DefaultLocationMarker(
+          child: Icon(
+            Icons.navigation,
+            color: Colors.white,
+          ),
+        ),
+        markerSize: Size(30, 30),
+        markerDirection: MarkerDirection.heading,
+      ),
+    );
   }
 }

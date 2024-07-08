@@ -103,7 +103,7 @@ class _TechnicianPageState extends State<TechnicianPage> {
                       StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection('cases')
-                            .where('status', isLessThan: 2)
+                            .where('status', isLessThan: 1)
                             .orderBy('casePosted', descending: true)
                             .snapshots(),
                         builder: (context, snapshot) {
@@ -199,10 +199,7 @@ class _TechnicianPageState extends State<TechnicianPage> {
                                       const SizedBox(
                                         height: 50,
                                       ),
-                                      SizedBox(
-                                          height: 300,
-                                          child: Image.asset(
-                                              "assets/images/worker.png")),
+                                      SizedBox(height: 300, child: Image.asset("assets/images/worker.png")),
                                       const Text(
                                         "Stack is Finished",
                                         style: TextStyle(fontSize: 24),
