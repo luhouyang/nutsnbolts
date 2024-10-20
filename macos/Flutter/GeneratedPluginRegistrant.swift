@@ -15,7 +15,7 @@ import geolocator_apple
 import google_sign_in_ios
 import location
 import path_provider_foundation
-import sqflite
+import sqflite_darwin
 import url_launcher_macos
 import video_player_avfoundation
 
