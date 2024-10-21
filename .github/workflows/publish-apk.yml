@@ -80,7 +80,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable" # 'dev', 'alpha', default to: 'stable'
-          flutter-version: "3.22.1"
+          flutter-version: "3.24.2"
 
       # Get flutter dependencies.
       - run: flutter pub get
@@ -90,13 +90,15 @@ jobs:
         run: echo "API_KEY=${{ secrets.OPEN_AI_API_KEY }}" >> .env
 
       # Run build_runner to generate code
-      - run: dart run build_runner build
+      # - run: dart run build_runner build
 
       # Build the APK
-      - run: flutter build apk
+      - run: flutter build apk --debug --split-per-abi
 
       # Upload generated APK to the artifacts.
-      - uses: actions/upload-artifact@v1
+      - name: Push to releases
+        uses: ncipollo/release-action@v1
         with:
-          name: release-apk
-          path: build/app/outputs/apk/release/app-release.apk
+          artifacts: "build/app/outputs/apk/debug/*.apk"
+          tag: v1.0.${{ github.run_number }}
+          token: ${{ secrets.TOKEN }}
