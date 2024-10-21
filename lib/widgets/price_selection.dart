@@ -14,8 +14,7 @@ class PriceSelection extends StatefulWidget {
   final List<dynamic> technicianPrice;
   final CaseEntity caseEntity;
 
-  const PriceSelection(
-      {super.key, required this.technicianPrice, required this.caseEntity});
+  const PriceSelection({super.key, required this.technicianPrice, required this.caseEntity});
 
   @override
   State<PriceSelection> createState() => _PriceSelectionState();
@@ -58,18 +57,20 @@ class _PriceSelectionState extends State<PriceSelection> {
                 style: TextStyle(fontSize: 14),
               ),
               items: widget.technicianPrice.map((item) {
-                BidEntity bidEntity =
-                    BidEntity.fromMap(item as Map<String, dynamic>);
+                BidEntity bidEntity = BidEntity.fromMap(item as Map<String, dynamic>);
                 return DropdownMenuItem<String>(
                   value: bidEntity.technicianId,
-                  child: Row(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                          "RM ${truncateString(bidEntity.price.toString(), 5)}"),
-                      Text(
-                          " | ${truncateString(bidEntity.technicianName, 15)} | "),
-                      Text(
-                          "R: ${truncateString(bidEntity.rating.toString(), 4)}"),
+                      Text("RM ${truncateString(bidEntity.price.toString(), 10)}"),
+                      Row(
+                        children: [
+                          Text("${truncateString(bidEntity.technicianName, 15)} | "),
+                          Text("Rating: ${truncateString(bidEntity.rating.toString(), 4)}"),
+                        ],
+                      ),
                     ],
                   ),
                 );
@@ -110,18 +111,16 @@ class _PriceSelectionState extends State<PriceSelection> {
                   padding: const EdgeInsets.all(10),
                   backgroundColor: MyColours.primaryColour,
                   foregroundColor: MyColours.secondaryColour,
-                  shape: ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
+                  shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                   }
-                  List<BidEntity> l = bidList
-                      .where((bid) => bid.technicianId == winningBid)
-                      .toList();
-                  await FirestoreModel()
-                      .confirmTechnician(l[0], widget.caseEntity);
+                  List<BidEntity> l = bidList.where((bid) => bid.technicianId == winningBid).toList();
+                  if (l.isNotEmpty) {
+                    await FirestoreModel().confirmTechnician(l[0], widget.caseEntity);
+                  }
                 },
                 child: const Text("Confirm"),
               ),

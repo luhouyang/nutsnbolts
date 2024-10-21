@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nutsnbolts/pages/become_technician.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
@@ -57,8 +58,9 @@ class ProfilePage extends StatelessWidget {
                       "Log Out",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
+                    onPressed: () async {
+                      await GoogleSignIn().signOut();
+                      await FirebaseAuth.instance.signOut();
                     },
                   ),
                 ),

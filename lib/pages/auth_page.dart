@@ -20,16 +20,14 @@ class AuthGate extends StatelessWidget {
         return null;
       }
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       return userCredential.user;
     } catch (e) {
       debugPrint(e.toString());
@@ -49,10 +47,8 @@ class AuthGate extends StatelessWidget {
                 children: [
                   Container(
                     height: 100,
-                    decoration: BoxDecoration(
-                        color: MyColours.primaryColour,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(50))),
+                    decoration:
+                        BoxDecoration(color: MyColours.primaryColour, borderRadius: const BorderRadius.only(bottomRight: Radius.circular(50))),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(25),
@@ -65,11 +61,7 @@ class AuthGate extends StatelessWidget {
                         ),
                         Text(
                           'nuts&bolts.',
-                          style: TextStyle(
-                              color: MyColours.primaryColour,
-                              fontFamily: "Poppins",
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(color: MyColours.primaryColour, fontFamily: "Poppins", fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                         const Text(
                           'Welcome to nuts&bolts, sign in and start generating income by showing off your hands on skills!',
@@ -85,8 +77,7 @@ class AuthGate extends StatelessWidget {
                                 padding: const EdgeInsets.all(10),
                                 foregroundColor: Colors.white,
                                 backgroundColor: MyColours.primaryColour,
-                                shape: ContinuousRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
+                                shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20))),
                             onPressed: () async {
                               User? user = await _signInWithGoogle();
                               if (user != null) {

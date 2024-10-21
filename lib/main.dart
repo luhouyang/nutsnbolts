@@ -1,10 +1,12 @@
 // Flutter imports
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // Package imports
 import 'package:dart_openai/dart_openai.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 // Project imports
@@ -13,7 +15,7 @@ import 'package:nutsnbolts/firebase_options.dart';
 import 'package:nutsnbolts/pages/auth_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 
-void main() async {
+Future<void> main() async {
   // Make sure Flutter is fully initialized then load firebase options
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -22,6 +24,10 @@ void main() async {
 
   // OpenAI API Setup
   // OpenAI.apiKey = Env.apiKey;
+
+  // await GoogleSignIn().signOut();
+  // await FirebaseAuth.instance.signOut();
+
   await dotenv.load(fileName: ".env").then(
     (value) {
       OpenAI.apiKey = dotenv.env['OPEN_AI_API_KEY']!;
@@ -29,7 +35,6 @@ void main() async {
       OpenAI.showLogs = true;
     },
   );
-
   runApp(const MainApp());
 }
 
