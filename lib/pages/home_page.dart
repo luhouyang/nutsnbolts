@@ -2,7 +2,9 @@
 import 'dart:async';
 
 // Flutter imports
+import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/widgets/my_money_field.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +45,14 @@ class _HomePageState extends State<HomePage> {
     UserUsecase userUsecase = Provider.of<UserUsecase>(context, listen: false);
     caseList = await FirestoreModel().getRecommendCases(userUsecase);
     _getMap();
+
+    await dotenv.load(fileName: ".env").then(
+      (value) {
+        OpenAI.apiKey = dotenv.env['OPEN_AI_API_KEY']!;
+        OpenAI.requestsTimeOut = const Duration(seconds: 60);
+        OpenAI.showLogs = true;
+      },
+    );
   }
 
   @override

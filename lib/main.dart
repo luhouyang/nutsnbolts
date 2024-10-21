@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 
 // Package imports
-import 'package:dart_openai/dart_openai.dart';
+// import 'package:dart_openai/dart_openai.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
@@ -28,13 +28,7 @@ Future<void> main() async {
   // await GoogleSignIn().signOut();
   // await FirebaseAuth.instance.signOut();
 
-  await dotenv.load(fileName: ".env").then(
-    (value) {
-      OpenAI.apiKey = dotenv.env['OPEN_AI_API_KEY']!;
-      OpenAI.requestsTimeOut = const Duration(seconds: 60);
-      OpenAI.showLogs = true;
-    },
-  );
+  
   runApp(const MainApp());
 }
 
