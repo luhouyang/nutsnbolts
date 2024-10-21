@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nutsnbolts/pages/become_technician.dart';
+import 'package:nutsnbolts/pages/info_page.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -35,8 +36,19 @@ class ProfilePage extends StatelessWidget {
               style: TextStyle(color: MyColours.secondaryColour, fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const InfoPage(),
+                  )),
+              icon: const Icon(Icons.info_outline_rounded),
+            ),
+          ),
           SizedBox(
-            height: MediaQuery.of(context).size.height / 5,
+            height: MediaQuery.of(context).size.height / 8,
           ),
           Padding(
             padding: const EdgeInsets.all(25),
