@@ -87,7 +87,7 @@ jobs:
 
       # Set environment variable
       - name: Set API Key
-        run: echo "API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+        run: echo "API_KEY=${{ secrets.OPEN_AI_API_KEY }}" >> .env
 
       # Run build_runner to generate code
       - run: dart run build_runner build

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Third-party package imports
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nutsnbolts/entities/case_entity.dart';
 import 'package:nutsnbolts/entities/message_entity.dart';
 import 'package:nutsnbolts/entities/user_entity.dart';
-import 'package:nutsnbolts/env/env.dart';
+// import 'package:nutsnbolts/env/env.dart';
 import 'package:nutsnbolts/model/firestore_model.dart';
 import 'package:nutsnbolts/usecases/user_usecase.dart';
 import 'package:nutsnbolts/utils/constants.dart';
@@ -39,7 +40,8 @@ class _ChatPageState extends State<ChatPage> {
 
   Future<void> _fetchAnalysis() async {
     const url = 'https://api.openai.com/v1/chat/completions';
-    final apiKey = Env.apiKey;
+    // final apiKey = Env.apiKey;
+    final apiKey = dotenv.env['OPEN_AI_API_KEY']!;
 
     final headers = {
       'Content-Type': 'application/json',
@@ -79,16 +81,10 @@ class _ChatPageState extends State<ChatPage> {
 
       if (response.statusCode == 200) {
         setState(() {
-          apiResponse =
-              jsonDecode(response.body)['choices'][0]['message']['content'];
+          apiResponse = jsonDecode(response.body)['choices'][0]['message']['content'];
         });
-        MessageEntity messageEntity = MessageEntity(
-            userId: "",
-            userName: "",
-            text: apiResponse!,
-            createdAt: Timestamp.fromDate(DateTime.now()));
-        await FirestoreModel()
-            .updateChat(messageEntity, widget.caseEntity.caseId);
+        MessageEntity messageEntity = MessageEntity(userId: "", userName: "", text: apiResponse!, createdAt: Timestamp.fromDate(DateTime.now()));
+        await FirestoreModel().updateChat(messageEntity, widget.caseEntity.caseId);
       } else {
         setState(() {
           apiResponse = 'Failed to fetch analysis: ${response.reasonPhrase}';
@@ -108,9 +104,7 @@ class _ChatPageState extends State<ChatPage> {
 
     ChatUser user1 = ChatUser(
       id: '1',
-      firstName: userEntity.uid == widget.caseEntity.clientId
-          ? widget.caseEntity.clientName
-          : widget.caseEntity.technicianName,
+      firstName: userEntity.uid == widget.caseEntity.clientId ? widget.caseEntity.clientName : widget.caseEntity.technicianName,
     );
     ChatUser assistant = ChatUser(
       id: '2',
@@ -118,9 +112,7 @@ class _ChatPageState extends State<ChatPage> {
     );
     ChatUser user2 = ChatUser(
       id: '3',
-      firstName: userEntity.uid == widget.caseEntity.technicianId
-          ? widget.caseEntity.clientName
-          : widget.caseEntity.technicianName,
+      firstName: userEntity.uid == widget.caseEntity.technicianId ? widget.caseEntity.clientName : widget.caseEntity.technicianName,
     );
 
     return Scaffold(
@@ -142,8 +134,7 @@ class _ChatPageState extends State<ChatPage> {
                 .orderBy('createdAt', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData ||
-                  snapshot.connectionState == ConnectionState.waiting) {
+              if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: LoadingAnimationWidget.beat(
                     size: 60,
@@ -161,41 +152,24 @@ class _ChatPageState extends State<ChatPage> {
               }
 
               List<ChatMessage> messages = <ChatMessage>[
-                ChatMessage(
-                    user: assistant,
-                    createdAt: widget.caseEntity.casePosted.toDate(),
-                    medias: <ChatMedia>[
-                      ChatMedia(
-                          url: widget.caseEntity.publicImageLink,
-                          fileName: widget.caseEntity.imageLink,
-                          type: MediaType.image)
-                    ])
+                ChatMessage(user: assistant, createdAt: widget.caseEntity.casePosted.toDate(), medias: <ChatMedia>[
+                  ChatMedia(url: widget.caseEntity.publicImageLink, fileName: widget.caseEntity.imageLink, type: MediaType.image)
+                ])
               ];
               for (MessageEntity msg in messageEntityList) {
                 if (msg.userId.isNotEmpty) {
                   if (msg.userId == userUsecase.userEntity.uid) {
-                    messages.add(ChatMessage(
-                        text: msg.text,
-                        user: user1,
-                        createdAt: msg.createdAt.toDate()));
+                    messages.add(ChatMessage(text: msg.text, user: user1, createdAt: msg.createdAt.toDate()));
                   } else {
-                    messages.add(ChatMessage(
-                        text: msg.text,
-                        user: user2,
-                        createdAt: msg.createdAt.toDate()));
+                    messages.add(ChatMessage(text: msg.text, user: user2, createdAt: msg.createdAt.toDate()));
                   }
                 } else {
-                  messages.add(ChatMessage(
-                      text: msg.text,
-                      user: assistant,
-                      createdAt: msg.createdAt.toDate()));
+                  messages.add(ChatMessage(text: msg.text, user: assistant, createdAt: msg.createdAt.toDate()));
                 }
               }
 
               messages.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-              MessageOptions messageOptions = MessageOptions(
-                  currentUserContainerColor: MyColours.primaryColour,
-                  currentUserTextColor: Colors.black);
+              MessageOptions messageOptions = MessageOptions(currentUserContainerColor: MyColours.primaryColour, currentUserTextColor: Colors.black);
 
               return DashChat(
                 messageOptions: messageOptions,
@@ -206,8 +180,7 @@ class _ChatPageState extends State<ChatPage> {
                       userName: userUsecase.userEntity.userName,
                       text: m.text,
                       createdAt: Timestamp.fromDate(DateTime.now()));
-                  FirestoreModel()
-                      .updateChat(messageEntity, widget.caseEntity.caseId);
+                  FirestoreModel().updateChat(messageEntity, widget.caseEntity.caseId);
                   // setState(() {
                   //   messages.insert(0, m);
                   // });
