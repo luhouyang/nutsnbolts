@@ -21,6 +21,14 @@ OPENAI_API_KEY=your-api-key-here
 
 Encountering issues? Try take a look at the [Flutter Docs](https://docs.flutter.dev/get-started/test-drive)
 
+## CHANGELOG
+
+**[10/21/2024]**
+
+- Run CI
+
+- Changed Api Key loading
+
 # Collaborators
 
 <a href="#readme">
