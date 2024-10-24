@@ -123,7 +123,9 @@ class _HomePageState extends State<HomePage> {
                           height: 50,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: Image.network(user.photoURL!),
+                            child: user.photoURL != null
+                                ? Image.network(user.photoURL!)
+                                : Image.asset("assets/images/logo.png")
                           ),
                         ),
                       ],
